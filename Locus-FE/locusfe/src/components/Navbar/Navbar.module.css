@@ -5,7 +5,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 32px;
+  padding: 0 24px;
   position: sticky;
   top: 0;
   z-index: 90;
@@ -15,11 +15,30 @@
 .left {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
+}
+
+.menuBtn {
+  background: none;
+  border: 1px solid var(--border-subtle);
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.menuBtn:hover {
+  background-color: var(--bg-subtle);
+  color: var(--text-primary);
 }
 
 .pageTitle {
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 700;
   color: var(--text-primary);
   letter-spacing: -0.02em;
@@ -28,7 +47,7 @@
 .right {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .statusIndicator {
@@ -40,6 +59,7 @@
   background-color: var(--bg-subtle);
   padding: 6px 12px;
   border-radius: var(--radius-full);
+  white-space: nowrap;
 }
 
 .statusDot {
@@ -67,4 +87,18 @@
 .iconButton:hover {
   background-color: var(--bg-subtle);
   color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 16px;
+  }
+
+  .statusText {
+    display: none;
+  }
+
+  .pageTitle {
+    font-size: 16px;
+  }
 }

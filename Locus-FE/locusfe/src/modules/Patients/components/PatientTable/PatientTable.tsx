@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Eye, Trash2, Calendar, Phone, MapPin, ShieldAlert, FileText } from 'lucide-react';
+import { Eye, Trash2, Calendar, Phone } from 'lucide-react';
 import { Patient } from '../../../../types/common.types';
 import styles from './PatientTable.module.css';
 
@@ -18,7 +18,7 @@ export const PatientTable: React.FC<PatientTableProps> = ({
   if (patients.length === 0) {
     return (
       <div className={styles.tableWrapper}>
-        <div className={styles.emptyState}>No patients found in database matching the criteria.</div>
+        <div className={styles.emptyState}>No patients found matching the criteria.</div>
       </div>
     );
   }
@@ -28,20 +28,27 @@ export const PatientTable: React.FC<PatientTableProps> = ({
       <table className={styles.table}>
         <thead>
           <tr>
-            <th>Patient Details</th>
-            <th>Gender & Age</th>
-            <th>Contact</th>
-            <th>Address</th>
-            <th>Emergency Contact</th>
-            <th>Clinical Notes</th>
-            <th style={{ textAlign: 'right' }}>Actions</th>
+            <th>Name</th>
+            <th className={`${styles.centerTh} ${styles.desktopOnly}`}>Gender</th>
+            <th className={`${styles.centerTh} ${styles.desktopOnly}`}>Mobile Number</th>
+            <th className={`${styles.centerTh} ${styles.desktopOnly}`}>Registration Date</th>
+            <th className={styles.centerTh}>Actions</th>
           </tr>
         </thead>
         <tbody>
           {patients.map((patient) => {
             const initials = `${patient.first_name[0] || ''}${patient.last_name[0] || ''}`.toUpperCase();
+            const formattedDate = patient.created_at
+              ? new Date(patient.created_at).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                })
+              : '—';
+
             return (
               <tr key={patient.id} className={styles.row}>
+                {/* 1. Name */}
                 <td>
                   <div className={styles.patientNameCell}>
                     <div className={styles.avatar}>{initials}</div>
@@ -49,82 +56,60 @@ export const PatientTable: React.FC<PatientTableProps> = ({
                       <div className={styles.name}>
                         {patient.first_name} {patient.last_name}
                       </div>
-                      <div className={styles.email}>
-                        ID: #{patient.id} • {patient.email || 'No email'}
+                      <div className={styles.subMeta}>
+                        ID: #{patient.id}
                       </div>
                     </div>
                   </div>
                 </td>
-                <td>
-                  <div>{patient.gender || '—'}</div>
-                  {patient.date_of_birth && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '12px', color: 'var(--text-muted)' }}>
-                      <Calendar size={12} />
-                      <span>{patient.date_of_birth}</span>
-                    </div>
-                  )}
+
+                {/* 2. Gender (Centered, Desktop only) */}
+                <td className={`${styles.centerTd} ${styles.desktopOnly}`}>
+                  <span style={{ fontWeight: 500 }}>{patient.gender || '—'}</span>
                 </td>
-                <td>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <Phone size={13} color="var(--text-muted)" />
+
+                {/* 3. Mobile Number (Centered, Desktop only) */}
+                <td className={`${styles.centerTd} ${styles.desktopOnly}`}>
+                  <div className={styles.phoneCell}>
+                    <Phone size={14} color="var(--text-muted)" />
                     <span>{patient.phone || '—'}</span>
                   </div>
                 </td>
-                <td>
-                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', maxWidth: '200px' }}>
-                    <MapPin size={13} color="var(--text-muted)" style={{ marginTop: '3px', flexShrink: 0 }} />
-                    <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
-                      {patient.residential_address || '—'}
-                    </span>
+
+                {/* 4. Registration Date (Centered, Desktop only) */}
+                <td className={`${styles.centerTd} ${styles.desktopOnly}`}>
+                  <div className={styles.regDateCell}>
+                    <Calendar size={13} color="var(--text-muted)" />
+                    <span>{formattedDate}</span>
                   </div>
                 </td>
-                <td>
-                  {patient.emergency_contact_name || patient.emergency_contact_phone ? (
-                    <div style={{ fontSize: '13px' }}>
-                      <div style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <ShieldAlert size={12} color="var(--accent-amber)" />
-                        <span>{patient.emergency_contact_name || 'Contact'}</span>
-                      </div>
-                      <div style={{ color: 'var(--text-muted)', fontSize: '12px' }}>
-                        {patient.emergency_contact_phone || ''}
-                      </div>
-                    </div>
-                  ) : (
-                    <span style={{ color: 'var(--text-muted)' }}>—</span>
-                  )}
-                </td>
-                <td>
-                  {patient.clinical_notes ? (
-                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '4px', maxWidth: '180px' }}>
-                      <FileText size={13} color="var(--text-muted)" style={{ marginTop: '2px', flexShrink: 0 }} />
-                      <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
-                        {patient.clinical_notes}
-                      </span>
-                    </div>
-                  ) : (
-                    <span style={{ color: 'var(--text-muted)' }}>—</span>
-                  )}
-                </td>
-                <td>
-                  <div className={styles.actions} style={{ justifyContent: 'flex-end' }}>
+
+                {/* 5. Actions (Centered on desktop, right-aligned on mobile) */}
+                <td className={styles.centerTd}>
+                  <div className={styles.actions}>
                     <button
-                      className={styles.actionBtn}
-                      title="View Patient Record"
+                      className={styles.viewBtn}
+                      title="View Full Patient Details"
                       onClick={() => navigate(`/patients/${patient.id}`)}
                     >
-                      <Eye size={17} />
+                      <Eye size={14} />
+                      <span>View</span>
                     </button>
                     {onDelete && (
                       <button
-                        className={`${styles.actionBtn} ${styles.deleteBtn}`}
+                        className={styles.deleteBtn}
                         title="Delete Patient"
                         onClick={() => {
-                          if (window.confirm(`Are you sure you want to delete ${patient.first_name} ${patient.last_name}?`)) {
+                          if (
+                            window.confirm(
+                              `Are you sure you want to delete ${patient.first_name} ${patient.last_name}?`
+                            )
+                          ) {
                             onDelete(patient.id);
                           }
                         }}
                       >
-                        <Trash2 size={17} />
+                        <Trash2 size={14} />
                       </button>
                     )}
                   </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { Bell, Activity } from 'lucide-react';
+import { Bell, Activity, Menu } from 'lucide-react';
 import styles from './Navbar.module.css';
 
 const routeTitles: Record<string, string> = {
@@ -10,7 +10,11 @@ const routeTitles: Record<string, string> = {
   '/tests': 'Test Catalog & Pricing',
 };
 
-export const Navbar: React.FC = () => {
+export interface NavbarProps {
+  onToggleSidebar: () => void;
+}
+
+export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
   const location = useLocation();
 
   let title = routeTitles[location.pathname];
@@ -25,13 +29,21 @@ export const Navbar: React.FC = () => {
   return (
     <header className={styles.navbar}>
       <div className={styles.left}>
+        <button
+          className={styles.menuBtn}
+          onClick={onToggleSidebar}
+          aria-label="Toggle navigation sidebar"
+          title="Toggle navigation"
+        >
+          <Menu size={20} />
+        </button>
         <h1 className={styles.pageTitle}>{title}</h1>
       </div>
 
       <div className={styles.right}>
         <div className={styles.statusIndicator}>
           <span className={styles.statusDot} />
-          <span>API Connected (Port 8000)</span>
+          <span className={styles.statusText}>Supabase Connected</span>
         </div>
 
         <button className={styles.iconButton} aria-label="System Activity" title="System Status">

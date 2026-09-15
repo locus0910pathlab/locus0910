@@ -7,6 +7,7 @@ import { PatientFilters } from './components/PatientFilters/PatientFilters';
 import { Button } from '../../components/Button/Button';
 import patientsService from './services/patients.service';
 import { Patient } from '../../types/common.types';
+import { PatientSortOption } from './types/patients.types';
 import styles from './Patients.module.css';
 
 export const Patients: React.FC = () => {
@@ -14,6 +15,7 @@ export const Patients: React.FC = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
   const [search, setSearch] = useState('');
   const [genderFilter, setGenderFilter] = useState('');
+  const [sortBy, setSortBy] = useState<PatientSortOption>('date_added_desc');
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchPatients = useCallback(async () => {
@@ -44,6 +46,7 @@ export const Patients: React.FC = () => {
     }
   };
 
+  // Filter patients
   const filteredPatients = patients.filter((patient) => {
     if (genderFilter && patient.gender !== genderFilter) {
       return false;
@@ -51,25 +54,64 @@ export const Patients: React.FC = () => {
     return true;
   });
 
+  // Sort patients based on selected option
+  const sortedPatients = [...filteredPatients].sort((a, b) => {
+    switch (sortBy) {
+      case 'name_asc': {
+        const nameA = `${a.first_name} ${a.last_name}`.toLowerCase();
+        const nameB = `${b.first_name} ${b.last_name}`.toLowerCase();
+        return nameA.localeCompare(nameB);
+      }
+      case 'name_desc': {
+        const nameA = `${a.first_name} ${a.last_name}`.toLowerCase();
+        const nameB = `${b.first_name} ${b.last_name}`.toLowerCase();
+        return nameB.localeCompare(nameA);
+      }
+      case 'date_added_asc': {
+        const dateA = new Date(a.created_at).getTime() || 0;
+        const dateB = new Date(b.created_at).getTime() || 0;
+        return dateA - dateB;
+      }
+      case 'date_added_desc': {
+        const dateA = new Date(a.created_at).getTime() || 0;
+        const dateB = new Date(b.created_at).getTime() || 0;
+        return dateB - dateA;
+      }
+      case 'date_modified': {
+        const dateA = new Date(a.updated_at || a.created_at).getTime() || 0;
+        const dateB = new Date(b.updated_at || b.created_at).getTime() || 0;
+        return dateB - dateA;
+      }
+      default:
+        return 0;
+    }
+  });
+
   return (
     <div className={styles.container}>
       <div className={styles.topBar}>
         <div className={styles.controls}>
           <PatientSearch value={search} onChange={setSearch} />
-          <PatientFilters gender={genderFilter} onGenderChange={setGenderFilter} />
+          <PatientFilters
+            gender={genderFilter}
+            onGenderChange={setGenderFilter}
+            sortBy={sortBy}
+            onSortChange={setSortBy}
+          />
         </div>
         <Button
           leftIcon={<UserPlus size={18} />}
           onClick={() => navigate('/patients/new')}
+          className={styles.addPatientBtn}
         >
-          Add New Patient
+          Add Patient
         </Button>
       </div>
 
       {isLoading ? (
         <div className={styles.loading}>Loading clinical patient records...</div>
       ) : (
-        <PatientTable patients={filteredPatients} onDelete={handleDelete} />
+        <PatientTable patients={sortedPatients} onDelete={handleDelete} />
       )}
     </div>
   );
