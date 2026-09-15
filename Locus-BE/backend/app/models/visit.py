@@ -41,7 +41,7 @@ class Visit(Base):
     __tablename__ = "visits"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
-    patient_id: Mapped[int] = mapped_column(Integer, ForeignKey("patients.id", ondelete="CASCADE"), nullable=False)
+    patient_id: Mapped[int] = mapped_column(Integer, ForeignKey("patients_data.id", ondelete="CASCADE"), nullable=False)
     visit_date: Mapped[datetime] = mapped_column(DateTime, default=func.now(), nullable=False)
     status: Mapped[VisitStatus] = mapped_column(SQLEnum(VisitStatus), default=VisitStatus.SCHEDULED, nullable=False)
     notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)

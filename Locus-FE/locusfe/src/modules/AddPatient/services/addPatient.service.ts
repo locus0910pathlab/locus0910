@@ -15,8 +15,10 @@ export const addPatientService = {
       phone: formData.phone || null,
       date_of_birth: formData.date_of_birth || null,
       gender: formData.gender || null,
-      address: formData.address || null,
-      emergency_contact: formData.emergency_contact || null,
+      residential_address: formData.residential_address || null,
+      emergency_contact_name: formData.emergency_contact_name || null,
+      emergency_contact_phone: formData.emergency_contact_phone || null,
+      clinical_notes: formData.clinical_notes || null,
     };
 
     const patient = await api.post<Patient>('/patients/', patientPayload);

@@ -5,8 +5,10 @@ export interface PatientFormData {
   phone: string;
   date_of_birth: string;
   gender: string;
-  address: string;
-  emergency_contact: string;
+  residential_address: string;
+  emergency_contact_name: string;
+  emergency_contact_phone: string;
+  clinical_notes: string;
   selectedTestIds: number[];
   notes: string;
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Eye, Trash2, Calendar, Phone } from 'lucide-react';
+import { Eye, Trash2, Calendar, Phone, MapPin, ShieldAlert, FileText } from 'lucide-react';
 import { Patient } from '../../../../types/common.types';
 import styles from './PatientTable.module.css';
 
@@ -18,7 +18,7 @@ export const PatientTable: React.FC<PatientTableProps> = ({
   if (patients.length === 0) {
     return (
       <div className={styles.tableWrapper}>
-        <div className={styles.emptyState}>No patients found matching the criteria.</div>
+        <div className={styles.emptyState}>No patients found in database matching the criteria.</div>
       </div>
     );
   }
@@ -28,11 +28,12 @@ export const PatientTable: React.FC<PatientTableProps> = ({
       <table className={styles.table}>
         <thead>
           <tr>
-            <th>Patient Name</th>
-            <th>Gender</th>
-            <th>Contact Details</th>
-            <th>Date of Birth</th>
-            <th>Registered Date</th>
+            <th>Patient Details</th>
+            <th>Gender & Age</th>
+            <th>Contact</th>
+            <th>Address</th>
+            <th>Emergency Contact</th>
+            <th>Clinical Notes</th>
             <th style={{ textAlign: 'right' }}>Actions</th>
           </tr>
         </thead>
@@ -48,24 +49,62 @@ export const PatientTable: React.FC<PatientTableProps> = ({
                       <div className={styles.name}>
                         {patient.first_name} {patient.last_name}
                       </div>
-                      <div className={styles.email}>{patient.email || 'No email'}</div>
+                      <div className={styles.email}>
+                        ID: #{patient.id} • {patient.email || 'No email'}
+                      </div>
                     </div>
                   </div>
                 </td>
-                <td>{patient.gender || '—'}</td>
+                <td>
+                  <div>{patient.gender || '—'}</div>
+                  {patient.date_of_birth && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '12px', color: 'var(--text-muted)' }}>
+                      <Calendar size={12} />
+                      <span>{patient.date_of_birth}</span>
+                    </div>
+                  )}
+                </td>
                 <td>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <Phone size={14} color="var(--text-muted)" />
+                    <Phone size={13} color="var(--text-muted)" />
                     <span>{patient.phone || '—'}</span>
                   </div>
                 </td>
                 <td>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <Calendar size={14} color="var(--text-muted)" />
-                    <span>{patient.date_of_birth || '—'}</span>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', maxWidth: '200px' }}>
+                    <MapPin size={13} color="var(--text-muted)" style={{ marginTop: '3px', flexShrink: 0 }} />
+                    <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
+                      {patient.residential_address || '—'}
+                    </span>
                   </div>
                 </td>
-                <td>{new Date(patient.created_at).toLocaleDateString()}</td>
+                <td>
+                  {patient.emergency_contact_name || patient.emergency_contact_phone ? (
+                    <div style={{ fontSize: '13px' }}>
+                      <div style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <ShieldAlert size={12} color="var(--accent-amber)" />
+                        <span>{patient.emergency_contact_name || 'Contact'}</span>
+                      </div>
+                      <div style={{ color: 'var(--text-muted)', fontSize: '12px' }}>
+                        {patient.emergency_contact_phone || ''}
+                      </div>
+                    </div>
+                  ) : (
+                    <span style={{ color: 'var(--text-muted)' }}>—</span>
+                  )}
+                </td>
+                <td>
+                  {patient.clinical_notes ? (
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '4px', maxWidth: '180px' }}>
+                      <FileText size={13} color="var(--text-muted)" style={{ marginTop: '2px', flexShrink: 0 }} />
+                      <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+                        {patient.clinical_notes}
+                      </span>
+                    </div>
+                  ) : (
+                    <span style={{ color: 'var(--text-muted)' }}>—</span>
+                  )}
+                </td>
                 <td>
                   <div className={styles.actions} style={{ justifyContent: 'flex-end' }}>
                     <button

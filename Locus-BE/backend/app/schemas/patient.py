@@ -10,8 +10,10 @@ class PatientBase(BaseModel):
     phone: Optional[str] = None
     date_of_birth: Optional[date] = None
     gender: Optional[str] = None
-    address: Optional[str] = None
-    emergency_contact: Optional[str] = None
+    residential_address: Optional[str] = None
+    emergency_contact_name: Optional[str] = None
+    emergency_contact_phone: Optional[str] = None
+    clinical_notes: Optional[str] = None
 
 
 class PatientCreate(PatientBase):
@@ -25,13 +27,15 @@ class PatientUpdate(BaseModel):
     phone: Optional[str] = None
     date_of_birth: Optional[date] = None
     gender: Optional[str] = None
-    address: Optional[str] = None
-    emergency_contact: Optional[str] = None
+    residential_address: Optional[str] = None
+    emergency_contact_name: Optional[str] = None
+    emergency_contact_phone: Optional[str] = None
+    clinical_notes: Optional[str] = None
 
 
 class PatientResponse(PatientBase):
     id: int
-    created_at: datetime
-    updated_at: datetime
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
 
     model_config = ConfigDict(from_attributes=True)

@@ -46,7 +46,7 @@ export const PatientForm: React.FC<PatientFormProps> = ({
         type="tel"
         value={formData.phone}
         onChange={(e) => onChange('phone', e.target.value)}
-        placeholder="+1 (555) 000-0000"
+        placeholder="+91 90000 00000"
       />
 
       <Input
@@ -74,29 +74,34 @@ export const PatientForm: React.FC<PatientFormProps> = ({
       <div className={styles.fullSpan}>
         <Input
           label="Residential Address"
-          value={formData.address}
-          onChange={(e) => onChange('address', e.target.value)}
-          placeholder="Street, City, State, ZIP code"
+          value={formData.residential_address}
+          onChange={(e) => onChange('residential_address', e.target.value)}
+          placeholder="House No, Street, City, State"
         />
       </div>
 
-      <div className={styles.fullSpan}>
-        <Input
-          label="Emergency Contact (Name & Phone)"
-          value={formData.emergency_contact}
-          onChange={(e) => onChange('emergency_contact', e.target.value)}
-          placeholder="Jane Doe - +1 (555) 999-8888"
-        />
-      </div>
+      <Input
+        label="Emergency Contact Name"
+        value={formData.emergency_contact_name}
+        onChange={(e) => onChange('emergency_contact_name', e.target.value)}
+        placeholder="e.g. Jane Doe"
+      />
+
+      <Input
+        label="Emergency Contact Phone"
+        value={formData.emergency_contact_phone}
+        onChange={(e) => onChange('emergency_contact_phone', e.target.value)}
+        placeholder="+91 80000 00000"
+      />
 
       <div className={styles.fullSpan}>
         <div className={styles.fieldGroup}>
-          <label className={styles.label}>Clinical Notes / Observations</label>
+          <label className={styles.label}>Clinical Notes / Symptoms</label>
           <textarea
             className={styles.textarea}
-            value={formData.notes}
-            onChange={(e) => onChange('notes', e.target.value)}
-            placeholder="Enter any preliminary clinical notes, symptoms, or physician references..."
+            value={formData.clinical_notes}
+            onChange={(e) => onChange('clinical_notes', e.target.value)}
+            placeholder="Preliminary clinical findings, referring physician, observations..."
           />
         </div>
       </div>

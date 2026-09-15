@@ -3,7 +3,22 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model patients_data {
+  id                      Int       @id @default(autoincrement())
+  first_name              String    @db.VarChar(100)
+  last_name               String    @db.VarChar(100)
+  email                   String?   @db.VarChar(150)
+  phone                   String?   @db.VarChar(20)
+  date_of_birth           DateTime? @db.Date
+  gender                  String?   @db.VarChar(30)
+  residential_address     String?
+  emergency_contact_name  String?   @db.VarChar(150)
+  emergency_contact_phone String?   @db.VarChar(20)
+  clinical_notes          String?
+  created_at              DateTime? @default(now()) @db.Timestamp(6)
+  updated_at              DateTime? @default(now()) @db.Timestamp(6)
 }

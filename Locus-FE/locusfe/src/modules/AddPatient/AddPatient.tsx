@@ -15,8 +15,10 @@ const initialFormData: PatientFormData = {
   phone: '',
   date_of_birth: '',
   gender: '',
-  address: '',
-  emergency_contact: '',
+  residential_address: '',
+  emergency_contact_name: '',
+  emergency_contact_phone: '',
+  clinical_notes: '',
   selectedTestIds: [],
   notes: '',
 };

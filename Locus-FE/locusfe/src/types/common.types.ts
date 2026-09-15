@@ -12,10 +12,12 @@ export interface Patient {
   phone?: string | null;
   date_of_birth?: string | null;
   gender?: string | null;
-  address?: string | null;
-  emergency_contact?: string | null;
+  residential_address?: string | null;
+  emergency_contact_name?: string | null;
+  emergency_contact_phone?: string | null;
+  clinical_notes?: string | null;
   created_at: string;
-  updated_at: string;
+  updated_at?: string | null;
 }
 
 export interface LabTest {

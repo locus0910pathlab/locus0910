@@ -43,13 +43,25 @@ export const PatientInfo: React.FC<PatientInfoProps> = ({ patient }) => {
         </div>
 
         <div className={styles.field}>
-          <span className={styles.label}>Emergency Contact</span>
-          <span className={styles.value}>{patient.emergency_contact || '—'}</span>
+          <span className={styles.label}>Residential Address</span>
+          <span className={styles.value}>{patient.residential_address || '—'}</span>
         </div>
 
         <div className={styles.field}>
-          <span className={styles.label}>Residential Address</span>
-          <span className={styles.value}>{patient.address || '—'}</span>
+          <span className={styles.label}>Emergency Contact Person</span>
+          <span className={styles.value}>{patient.emergency_contact_name || '—'}</span>
+        </div>
+
+        <div className={styles.field}>
+          <span className={styles.label}>Emergency Contact Phone</span>
+          <span className={styles.value}>{patient.emergency_contact_phone || '—'}</span>
+        </div>
+
+        <div className={styles.field} style={{ gridColumn: '1 / -1' }}>
+          <span className={styles.label}>Clinical Notes / Observations</span>
+          <span className={styles.value} style={{ whiteSpace: 'pre-wrap' }}>
+            {patient.clinical_notes || 'No notes on record.'}
+          </span>
         </div>
       </div>
     </div>
