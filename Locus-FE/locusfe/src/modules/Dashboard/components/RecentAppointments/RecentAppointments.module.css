@@ -1,0 +1,239 @@
+.container {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.viewAll {
+  font-size: 13px;
+  color: var(--primary-600);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: color var(--transition-fast);
+}
+
+.viewAll:hover {
+  text-decoration: underline;
+  color: var(--primary-700);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-app);
+  transition: all var(--transition-fast);
+  text-decoration: none;
+  gap: 12px;
+}
+
+.item:hover {
+  border-color: var(--primary-400);
+  background-color: var(--primary-50);
+  transform: translateX(2px);
+}
+
+.patientMeta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 170px;
+}
+
+.avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-500), var(--primary-700));
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.patientId {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-family: monospace;
+  margin-top: 1px;
+}
+
+.dateSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.date {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.time {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.rightMeta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.statusAndAmount {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 95px;
+}
+
+.amount {
+  font-weight: 800;
+  font-size: 13px;
+  color: var(--accent-emerald);
+  text-align: center;
+}
+
+/* Status Badges */
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.statusScheduled {
+  background-color: var(--primary-50);
+  color: var(--primary-700);
+}
+.statusScheduled .statusDot {
+  background-color: var(--primary-600);
+}
+
+.statusInProgress {
+  background-color: var(--accent-amber-light);
+  color: #b45309;
+}
+.statusInProgress .statusDot {
+  background-color: #f59e0b;
+}
+
+.statusCompleted {
+  background-color: var(--accent-emerald-light);
+  color: #065f46;
+}
+.statusCompleted .statusDot {
+  background-color: var(--accent-emerald);
+}
+
+.statusCancelled {
+  background-color: var(--accent-rose-light);
+  color: var(--accent-rose);
+}
+.statusCancelled .statusDot {
+  background-color: var(--accent-rose);
+}
+
+.viewBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--primary-200);
+  background-color: var(--primary-50);
+  color: var(--primary-700);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.viewBtn:hover {
+  background-color: var(--primary-100);
+  border-color: var(--primary-300);
+  color: var(--primary-800);
+}
+
+.empty {
+  padding: 36px 20px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (max-width: 640px) {
+  .dateSection {
+    display: none;
+  }
+
+  .item {
+    padding: 10px 12px;
+  }
+}

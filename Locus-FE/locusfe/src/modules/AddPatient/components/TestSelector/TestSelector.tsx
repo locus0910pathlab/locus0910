@@ -42,7 +42,7 @@ export const TestSelector: React.FC<TestSelectorProps> = ({
                 <span className={styles.testName}>{test.name}</span>
                 <div className={styles.testMeta}>
                   <span>{test.code}</span>
-                  <span className={styles.price}>${Number(test.price).toFixed(2)}</span>
+                  <span className={styles.price}>₹{Number(test.price).toFixed(2)}</span>
                 </div>
               </div>
             </div>
@@ -56,7 +56,7 @@ export const TestSelector: React.FC<TestSelectorProps> = ({
             {selectedTestIds.length} {selectedTestIds.length === 1 ? 'test' : 'tests'} selected
           </span>
           <span className={styles.summaryTotal}>
-            Total: ${totalPrice.toFixed(2)}
+            Total: ₹{totalPrice.toFixed(2)}
           </span>
         </div>
       )}

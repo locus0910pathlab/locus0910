@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard,
   Users,
-  UserPlus,
+  Calendar,
   FlaskConical,
   Stethoscope,
   ChevronLeft,
@@ -28,7 +28,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const navItems = [
     { to: '/', label: 'Dashboard', icon: <LayoutDashboard size={19} /> },
     { to: '/patients', label: 'Patients', icon: <Users size={19} /> },
-    { to: '/patients/new', label: 'Add Patient', icon: <UserPlus size={19} /> },
+    { to: '/appointments', label: 'Appointments', icon: <Calendar size={19} /> },
     { to: '/tests', label: 'Lab Tests', icon: <FlaskConical size={19} /> },
   ];
 

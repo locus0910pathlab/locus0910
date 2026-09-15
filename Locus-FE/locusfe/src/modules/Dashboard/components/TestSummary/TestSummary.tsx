@@ -30,7 +30,7 @@ export const TestSummary: React.FC<TestSummaryProps> = ({ tests }) => {
                 <div className={styles.testName}>{test.name}</div>
               </div>
               <div className={styles.testPrice}>
-                ${Number(test.price).toFixed(2)}
+                ₹{Number(test.price).toFixed(2)}
               </div>
             </div>
           ))}

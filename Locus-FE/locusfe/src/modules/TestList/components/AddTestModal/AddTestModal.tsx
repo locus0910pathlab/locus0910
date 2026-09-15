@@ -80,7 +80,7 @@ export const AddTestModal: React.FC<AddTestModalProps> = ({
 
         <div className={styles.row}>
           <Input
-            label="Price ($ USD)"
+            label="Price (₹ INR)"
             required
             type="number"
             step="0.01"

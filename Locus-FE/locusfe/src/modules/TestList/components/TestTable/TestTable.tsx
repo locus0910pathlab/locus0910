@@ -55,7 +55,7 @@ export const TestTable: React.FC<TestTableProps> = ({ tests, onDelete }) => {
                 </div>
               </td>
               <td>
-                <span className={styles.price}>${Number(test.price).toFixed(2)}</span>
+                <span className={styles.price}>₹{Number(test.price).toFixed(2)}</span>
               </td>
               <td>
                 <span className={styles.activeStatus}>

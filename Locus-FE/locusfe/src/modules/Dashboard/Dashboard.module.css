@@ -16,35 +16,89 @@
   gap: 24px;
 }
 
-@media (max-width: 900px) {
-  .contentGrid {
-    grid-template-columns: 1fr;
-  }
-}
-
 .quickActions {
   background: linear-gradient(135deg, var(--primary-700) 0%, var(--primary-900) 100%);
   border-radius: var(--radius-lg);
-  padding: 24px 28px;
+  padding: 20px 24px;
   color: white;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  align-content: flex-start;
   box-shadow: var(--shadow-md);
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.quickActionText {
+  flex: 0 1 auto;
 }
 
 .quickActionText h2 {
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 700;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
+  line-height: 1.3;
 }
 
 .quickActionText p {
   font-size: 13px;
   color: var(--primary-200);
+  line-height: 1.4;
+  max-width: 580px;
 }
 
 .actionButtons {
   display: flex;
+  align-items: center;
   gap: 12px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 900px) {
+  .contentGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .quickActions {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: 18px 18px;
+    gap: 12px;
+  }
+
+  .quickActionText {
+    flex: 0 0 auto;
+  }
+
+  .actionButtons {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .actionButtons > * {
+    flex: 1 1 160px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard {
+    gap: 20px;
+  }
+
+  .quickActions {
+    padding: 16px 14px;
+    gap: 12px;
+  }
+
+  .actionButtons {
+    flex-direction: column;
+  }
+
+  .actionButtons > * {
+    width: 100%;
+  }
 }

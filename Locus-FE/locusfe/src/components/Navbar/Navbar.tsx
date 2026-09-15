@@ -7,6 +7,8 @@ const routeTitles: Record<string, string> = {
   '/': 'Laboratory Overview',
   '/patients': 'Patient Directory',
   '/patients/new': 'Register New Patient',
+  '/appointments': 'Appointments',
+  '/appointments/new': 'Create Appointment',
   '/tests': 'Test Catalog & Pricing',
 };
 

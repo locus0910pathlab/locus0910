@@ -25,7 +25,7 @@ export const TestCard: React.FC<TestCardProps> = ({ test }) => {
       </div>
 
       <div className={styles.footer}>
-        <div className={styles.price}>${Number(test.price).toFixed(2)}</div>
+        <div className={styles.price}>₹{Number(test.price).toFixed(2)}</div>
         <div className={styles.meta}>
           <Clock size={13} />
           <span>{test.turnaround_hours || 24}h turnaround</span>

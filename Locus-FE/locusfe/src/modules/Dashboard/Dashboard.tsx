@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, FlaskConical, CalendarCheck, Clock, PlusCircle } from 'lucide-react';
+import { Users, FlaskConical, CalendarCheck, Clock, PlusCircle, CalendarPlus } from 'lucide-react';
 import { StatsCard } from './components/StatsCard/StatsCard';
-import { RecentPatients } from './components/RecentPatients/RecentPatients';
+import { RecentAppointments } from './components/RecentAppointments/RecentAppointments';
 import { TestSummary } from './components/TestSummary/TestSummary';
 import { Button } from '../../components/Button/Button';
 import dashboardService from './services/dashboard.service';
@@ -42,6 +42,13 @@ export const Dashboard: React.FC = () => {
           >
             Register Patient
           </Button>
+          <Button
+            variant="primary"
+            leftIcon={<CalendarPlus size={17} />}
+            onClick={() => navigate('/appointments/new')}
+          >
+            Schedule Appointment
+          </Button>
         </div>
       </div>
 
@@ -77,7 +84,7 @@ export const Dashboard: React.FC = () => {
       </div>
 
       <div className={styles.contentGrid}>
-        <RecentPatients patients={data?.recentPatients || []} />
+        <RecentAppointments appointments={data?.recentVisits || []} />
         <TestSummary tests={data?.popularTests || []} />
       </div>
     </div>

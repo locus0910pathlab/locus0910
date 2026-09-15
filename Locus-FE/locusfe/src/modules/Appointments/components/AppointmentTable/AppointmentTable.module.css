@@ -1,0 +1,282 @@
+.tableWrapper {
+  background-color: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  overflow-x: auto;
+  box-shadow: var(--shadow-sm);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.table th {
+  padding: 12px 18px;
+  background-color: var(--bg-subtle);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-subtle);
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 14px 18px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  vertical-align: middle;
+}
+
+.row {
+  transition: background-color var(--transition-fast);
+}
+
+.row:hover {
+  background-color: var(--bg-hover);
+}
+
+/* Center aligned table header and cells */
+.centerTh {
+  text-align: center !important;
+}
+
+.centerTd {
+  text-align: center !important;
+}
+
+/* Appointment ID */
+.aptIdBadge {
+  font-family: monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary-700);
+  background-color: var(--primary-50);
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--primary-100);
+}
+
+/* Patient Cell */
+.patientCell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--primary-500), var(--primary-700));
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 12px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.patientName {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.subMeta {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Date & Time Cell */
+.dateTimeCell {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.dateText {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.timeText {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* Tests Cell */
+.testsList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+  max-width: 220px;
+  margin: 0 auto;
+}
+
+.testBadge {
+  font-size: 11px;
+  font-weight: 600;
+  background-color: var(--bg-subtle);
+  color: var(--text-secondary);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+/* Price */
+.amount {
+  font-weight: 800;
+  color: var(--accent-emerald);
+  font-size: 14px;
+}
+
+/* Status Badges */
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.statusScheduled {
+  background-color: var(--primary-50);
+  color: var(--primary-700);
+}
+
+.statusScheduled .statusDot {
+  background-color: var(--primary-600);
+}
+
+.statusInProgress {
+  background-color: var(--accent-amber-light);
+  color: #b45309;
+}
+
+.statusInProgress .statusDot {
+  background-color: #f59e0b;
+}
+
+.statusCompleted {
+  background-color: var(--accent-emerald-light);
+  color: #065f46;
+}
+
+.statusCompleted .statusDot {
+  background-color: var(--accent-emerald);
+}
+
+.statusCancelled {
+  background-color: var(--accent-rose-light);
+  color: var(--accent-rose);
+}
+
+.statusCancelled .statusDot {
+  background-color: var(--accent-rose);
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.viewBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--primary-200);
+  background-color: var(--primary-50);
+  color: var(--primary-700);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.viewBtn:hover {
+  background-color: var(--primary-100);
+  border-color: var(--primary-300);
+  color: var(--primary-800);
+}
+
+.deleteBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--accent-rose-light);
+  background-color: var(--bg-surface);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.deleteBtn:hover {
+  background-color: var(--accent-rose-light);
+  border-color: var(--accent-rose);
+  color: var(--accent-rose);
+}
+
+.emptyState {
+  padding: 50px 20px;
+  text-align: center;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.emptyTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.emptySub {
+  font-size: 13px;
+  color: var(--text-secondary);
+  max-width: 360px;
+}
+
+/* Responsive Behavior */
+@media (max-width: 768px) {
+  .desktopOnly {
+    display: none !important;
+  }
+
+  .table td,
+  .table th {
+    padding: 12px 14px;
+  }
+
+  .actions {
+    justify-content: flex-end;
+  }
+}

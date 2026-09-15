@@ -28,7 +28,7 @@ export const VisitHistory: React.FC<VisitHistoryProps> = ({ visits }) => {
                     <span className={`badge ${statusClass}`}>{visit.status}</span>
                   </div>
                   <div className={styles.amount}>
-                    ${Number(visit.total_amount || 0).toFixed(2)}
+                    ₹{Number(visit.total_amount || 0).toFixed(2)}
                   </div>
                 </div>
 

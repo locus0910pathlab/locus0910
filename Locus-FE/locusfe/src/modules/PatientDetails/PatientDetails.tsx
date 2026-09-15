@@ -247,7 +247,7 @@ export const PatientDetails: React.FC = () => {
                       );
                     }}
                   />
-                  <span>{t.name} ({t.code}) - ${Number(t.price).toFixed(2)}</span>
+                  <span>{t.name} ({t.code}) - ₹{Number(t.price).toFixed(2)}</span>
                 </label>
               ))}
             </div>
