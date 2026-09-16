@@ -10,6 +10,83 @@
   gap: 20px;
 }
 
+.profitBreakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 3.5px;
+  width: 100%;
+}
+
+.profitLoading {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-style: italic;
+  padding: 8px 0;
+}
+
+.breakdownRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.patientIncomeLabel {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.patientIncomeValue {
+  font-weight: 700;
+  color: #0f172a;
+  font-variant-numeric: tabular-nums;
+}
+
+.outsourcedLabel,
+.discountLabel {
+  font-weight: 600;
+  color: var(--accent-rose, #dc2626);
+}
+
+.outsourcedValue,
+.discountValue {
+  font-weight: 700;
+  color: var(--accent-rose, #dc2626);
+  font-variant-numeric: tabular-nums;
+}
+
+.profitDivider {
+  border-top: 1px dashed var(--border-medium, #cbd5e1);
+  margin: 4px 0 2px 0;
+  width: 100%;
+}
+
+.profitResultRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 2px;
+}
+
+.profitResultLabel {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-emerald, #10b981);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.profitResultValue {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--accent-emerald, #059669);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+
 .contentGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;

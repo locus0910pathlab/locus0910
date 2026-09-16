@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, FlaskConical, CalendarCheck, Clock, PlusCircle, CalendarPlus } from 'lucide-react';
+import { Users, FlaskConical, CalendarCheck, TrendingUp, PlusCircle, CalendarPlus } from 'lucide-react';
 import { StatsCard } from './components/StatsCard/StatsCard';
 import { RecentAppointments } from './components/RecentAppointments/RecentAppointments';
 import { TestSummary } from './components/TestSummary/TestSummary';
@@ -24,6 +24,15 @@ export const Dashboard: React.FC = () => {
 
   useEffect(() => {
     loadData();
+
+    const handleAppointmentCompleted = () => {
+      loadData();
+    };
+
+    window.addEventListener('appointment-completed', handleAppointmentCompleted);
+    return () => {
+      window.removeEventListener('appointment-completed', handleAppointmentCompleted);
+    };
   }, [loadData]);
 
   const currentMonthShort = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(new Date()).toUpperCase();
@@ -78,12 +87,65 @@ export const Dashboard: React.FC = () => {
           badge={currentMonthShort}
         />
         <StatsCard
-          title="Pending Diagnostics"
-          value={isLoading ? '...' : (data?.stats.pendingResults ?? 0)}
-          subtext="Specimens being processed"
-          icon={<Clock size={22} />}
-          color="amber"
-        />
+          title="Total Profit / Month"
+          icon={<TrendingUp size={20} />}
+          color="emerald"
+          badge={currentMonthShort}
+        >
+          {isLoading ? (
+            <div className={styles.profitLoading}>Calculating metrics...</div>
+          ) : (
+            <div className={styles.profitBreakdown}>
+              <div className={styles.breakdownRow}>
+                <span className={styles.patientIncomeLabel} title="Total Patient Income">
+                  Total:
+                </span>
+                <span className={styles.patientIncomeValue}>
+                  ₹
+                  {(data?.stats.profitStats?.patientIncome ?? 0).toLocaleString('en-IN', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </span>
+              </div>
+              <div className={styles.breakdownRow}>
+                <span className={styles.outsourcedLabel} title="B2B Cost Paid to Lab Partners">
+                  - Outsourced share:
+                </span>
+                <span className={styles.outsourcedValue}>
+                  - ₹
+                  {(data?.stats.profitStats?.outsourcedShare ?? 0).toLocaleString('en-IN', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </span>
+              </div>
+              <div className={styles.breakdownRow}>
+                <span className={styles.discountLabel} title="Total Discounts Given">
+                  - Discount given:
+                </span>
+                <span className={styles.discountValue}>
+                  - ₹
+                  {(data?.stats.profitStats?.discountGiven ?? 0).toLocaleString('en-IN', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </span>
+              </div>
+              <div className={styles.profitDivider} />
+              <div className={styles.profitResultRow}>
+                <span className={styles.profitResultLabel}>Profit:</span>
+                <span className={styles.profitResultValue}>
+                  ₹
+                  {(data?.stats.profitStats?.totalProfit ?? 0).toLocaleString('en-IN', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </span>
+              </div>
+            </div>
+          )}
+        </StatsCard>
       </div>
 
       <div className={styles.contentGrid}>

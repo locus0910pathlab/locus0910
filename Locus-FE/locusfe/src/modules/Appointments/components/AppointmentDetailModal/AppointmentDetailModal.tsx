@@ -47,7 +47,43 @@ export const AppointmentDetailModal: React.FC<AppointmentDetailModalProps> = ({
     return Number(currentVisit.total_amount) || 0;
   }, [currentVisit]);
 
-  // Synchronize with incoming visit prop and set default discount to 0
+  const parseExistingDiscount = (v: Visit, sub: number) => {
+    if (v.notes) {
+      const match = v.notes.match(/Discount:\s*(?:₹|Rs\.?)?\s*([\d.]+)(%)?/i);
+      if (match) {
+        const isPercent = Boolean(match[2]);
+        const val = parseFloat(match[1]);
+        if (!isNaN(val) && val > 0) {
+          const amt = isPercent && sub ? (sub * val) / 100 : val;
+          return {
+            type: isPercent ? ('percent' as const) : ('fixed' as const),
+            value: match[1],
+            amount: amt,
+            label: isPercent ? `${match[1]}%` : `₹${match[1]}`,
+          };
+        }
+      }
+    }
+    if (sub > Number(v.total_amount)) {
+      const diff = Math.round((sub - Number(v.total_amount)) * 100) / 100;
+      if (diff > 0) {
+        return {
+          type: 'fixed' as const,
+          value: String(diff),
+          amount: diff,
+          label: `₹${diff}`,
+        };
+      }
+    }
+    return {
+      type: 'percent' as const,
+      value: '0',
+      amount: 0,
+      label: '',
+    };
+  };
+
+  // Synchronize with incoming visit prop and initialize discount
   useEffect(() => {
     if (!visit) return;
     setCurrentVisit(visit);
@@ -55,8 +91,13 @@ export const AppointmentDetailModal: React.FC<AppointmentDetailModalProps> = ({
     setErrorMessage('');
     setSuccessMessage('');
 
-    setDiscountType('percent');
-    setDiscountValue('0');
+    const sub = (visit.tests_ordered || []).reduce(
+      (acc, t) => acc + (Number(t.test?.price) || 0),
+      0
+    );
+    const existing = parseExistingDiscount(visit, sub);
+    setDiscountType(existing.type);
+    setDiscountValue(existing.value);
   }, [visit, initialIsCompleting]);
 
   if (!currentVisit) return null;
@@ -355,6 +396,11 @@ export const AppointmentDetailModal: React.FC<AppointmentDetailModalProps> = ({
                   <div className={styles.infoValue} style={{ color: 'var(--accent-emerald)' }}>
                     ₹{Number(currentVisit.total_amount).toFixed(2)}
                   </div>
+                  {parseExistingDiscount(currentVisit, subtotal).amount > 0 && (
+                    <div className={styles.discountSubtext}>
+                      Discount: {parseExistingDiscount(currentVisit, subtotal).label}
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -378,6 +424,19 @@ export const AppointmentDetailModal: React.FC<AppointmentDetailModalProps> = ({
                     </div>
                   ))}
                 </div>
+
+                {parseExistingDiscount(currentVisit, subtotal).amount > 0 && (
+                  <div className={styles.financialSummary}>
+                    <div className={styles.financialRow}>
+                      <span>Tests Subtotal</span>
+                      <span>₹{subtotal.toFixed(2)}</span>
+                    </div>
+                    <div className={`${styles.financialRow} ${styles.financialRowDiscount}`}>
+                      <span>Discount Given ({parseExistingDiscount(currentVisit, subtotal).label})</span>
+                      <span>-₹{parseExistingDiscount(currentVisit, subtotal).amount.toFixed(2)}</span>
+                    </div>
+                  </div>
+                )}
 
                 <div className={styles.totalBar}>
                   <span style={{ fontWeight: 700, fontSize: '13px', color: 'var(--text-primary)' }}>
@@ -441,8 +500,9 @@ export const AppointmentDetailModal: React.FC<AppointmentDetailModalProps> = ({
                   type="button"
                   className={styles.fullWidthCompleteBtn}
                   onClick={() => {
-                    setDiscountType('percent');
-                    setDiscountValue('0');
+                    const existing = parseExistingDiscount(currentVisit, subtotal);
+                    setDiscountType(existing.type);
+                    setDiscountValue(existing.value);
                     setIsCompleting(true);
                   }}
                 >

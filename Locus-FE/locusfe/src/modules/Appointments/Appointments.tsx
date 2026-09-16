@@ -83,17 +83,36 @@ export const Appointments: React.FC = () => {
     );
   });
 
-  // Sort appointments
+  // Sort appointments: Scheduled on top, completed below, and then by selected sort
   const sortedAppointments = [...filteredAppointments].sort((a, b) => {
+    const getPriority = (status: string) => {
+      if (status === 'SCHEDULED') return 0;
+      if (status === 'IN_PROGRESS') return 1;
+      if (status === 'COMPLETED') return 2;
+      if (status === 'CANCELLED') return 3;
+      return 4;
+    };
+    const diff = getPriority(a.status) - getPriority(b.status);
+    if (diff !== 0) return diff;
+
+    // For completed appointments on default date_desc, sort by completion time (updated_at) or id
+    if (sortBy === 'date_desc' && a.status === 'COMPLETED' && b.status === 'COMPLETED') {
+      const timeA = new Date(a.updated_at || a.created_at || a.visit_date).getTime() || 0;
+      const timeB = new Date(b.updated_at || b.created_at || b.visit_date).getTime() || 0;
+      if (timeB !== timeA) return timeB - timeA;
+      return b.id - a.id;
+    }
+
     switch (sortBy) {
       case 'date_desc': {
-        const timeA = new Date(a.visit_date).getTime() || 0;
-        const timeB = new Date(b.visit_date).getTime() || 0;
-        return timeB - timeA;
+        const timeA = new Date(a.visit_date || a.created_at).getTime() || 0;
+        const timeB = new Date(b.visit_date || b.created_at).getTime() || 0;
+        if (timeB !== timeA) return timeB - timeA;
+        return b.id - a.id;
       }
       case 'date_asc': {
-        const timeA = new Date(a.visit_date).getTime() || 0;
-        const timeB = new Date(b.visit_date).getTime() || 0;
+        const timeA = new Date(a.visit_date || a.created_at).getTime() || 0;
+        const timeB = new Date(b.visit_date || b.created_at).getTime() || 0;
         return timeA - timeB;
       }
       case 'patient_asc': {
@@ -110,8 +129,11 @@ export const Appointments: React.FC = () => {
         return Number(b.total_amount) - Number(a.total_amount);
       case 'amount_asc':
         return Number(a.total_amount) - Number(b.total_amount);
-      default:
-        return 0;
+      default: {
+        const timeA = new Date(a.visit_date || a.created_at).getTime() || 0;
+        const timeB = new Date(b.visit_date || b.created_at).getTime() || 0;
+        return timeB - timeA;
+      }
     }
   });
 

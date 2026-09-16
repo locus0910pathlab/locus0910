@@ -4,7 +4,9 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.schemas.patient import PatientCreate, PatientUpdate, PatientResponse
+from app.schemas.visit import VisitResponse
 from app.services.patient_service import PatientService
+from app.services.visit_service import VisitService
 
 router = APIRouter(prefix="/patients", tags=["Patients"])
 
@@ -45,6 +47,18 @@ def get_patient(patient_id: int, db: Session = Depends(get_db)):
             detail=f"Patient with ID {patient_id} not found.",
         )
     return patient
+
+
+@router.get("/{patient_id}/visits", response_model=List[VisitResponse])
+def get_patient_visits(patient_id: int, db: Session = Depends(get_db)):
+    """Retrieve all visits and orders for a patient."""
+    patient = PatientService.get_by_id(db, patient_id)
+    if not patient:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Patient with ID {patient_id} not found.",
+        )
+    return VisitService.get_multi(db, patient_id=patient_id)
 
 
 @router.put("/{patient_id}", response_model=PatientResponse)

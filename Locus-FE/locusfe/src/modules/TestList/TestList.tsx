@@ -36,10 +36,21 @@ export const TestList: React.FC = () => {
   }, [fetchTests]);
 
   const handleSaveTest = async (data: TestFormData) => {
+    const codeUpper = data.code.trim().toUpperCase();
+    const isDuplicate = tests.some(
+      (t) => t.code?.trim().toUpperCase() === codeUpper && t.id !== editingTest?.id
+    );
+    if (isDuplicate) {
+      throw new Error(`A test with code '${codeUpper}' already exists. Test codes must be unique.`);
+    }
+    const cleanData = {
+      ...data,
+      code: codeUpper,
+    };
     if (editingTest) {
-      await testListService.updateTest(editingTest.id, data);
+      await testListService.updateTest(editingTest.id, cleanData);
     } else {
-      await testListService.createTest(data);
+      await testListService.createTest(cleanData);
     }
     await fetchTests();
   };
@@ -166,6 +177,7 @@ export const TestList: React.FC = () => {
         }}
         onSubmit={handleSaveTest}
         testToEdit={editingTest}
+        existingTests={tests}
       />
     </div>
   );

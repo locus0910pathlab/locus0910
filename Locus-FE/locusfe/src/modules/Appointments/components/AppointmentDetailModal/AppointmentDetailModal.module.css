@@ -176,6 +176,37 @@
   border: 1px solid var(--primary-100);
 }
 
+.discountSubtext {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent-rose, #e11d48);
+  margin-top: 3px;
+}
+
+.financialSummary {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  background-color: var(--bg-app);
+  border: 1px solid var(--border-subtle);
+  margin-top: 4px;
+}
+
+.financialRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.financialRowDiscount {
+  color: var(--accent-rose, #e11d48);
+  font-weight: 600;
+}
+
 .footer {
   padding: 16px 24px;
   background-color: var(--bg-subtle);

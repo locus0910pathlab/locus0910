@@ -22,18 +22,26 @@ export const appointmentsService = {
   },
 
   async updateAppointmentStatus(id: number, status: string): Promise<Visit> {
-    return api.put<Visit>(`/visits/${id}`, { status });
+    const res = await api.put<Visit>(`/visits/${id}`, { status });
+    if (typeof window !== 'undefined' && status === 'COMPLETED') {
+      window.dispatchEvent(new CustomEvent('appointment-completed', { detail: res }));
+    }
+    return res;
   },
 
   async completeAppointment(
     id: number,
     data: { total_amount: number; notes: string }
   ): Promise<Visit> {
-    return api.put<Visit>(`/visits/${id}`, {
+    const res = await api.put<Visit>(`/visits/${id}`, {
       status: 'COMPLETED',
       total_amount: data.total_amount,
       notes: data.notes,
     });
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('appointment-completed', { detail: res }));
+    }
+    return res;
   },
 };
 

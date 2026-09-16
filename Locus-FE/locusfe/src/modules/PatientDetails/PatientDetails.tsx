@@ -3,13 +3,12 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, PlusCircle } from 'lucide-react';
 import { PatientInfo } from './components/PatientInfo/PatientInfo';
 import { VisitHistory } from './components/VisitHistory/VisitHistory';
-import { TestHistory, FlatTestRecord } from './components/TestHistory/TestHistory';
 import { Modal } from '../../components/Modal/Modal';
 import { Input } from '../../components/Input/Input';
 import { Button } from '../../components/Button/Button';
 import patientDetailsService from './services/patientDetails.service';
 import addPatientService from '../AddPatient/services/addPatient.service';
-import { Patient, Visit, TestStatus, LabTest } from '../../types/common.types';
+import { Patient, Visit, LabTest } from '../../types/common.types';
 import styles from './PatientDetails.module.css';
 
 export const PatientDetails: React.FC = () => {
@@ -19,15 +18,6 @@ export const PatientDetails: React.FC = () => {
   const [patient, setPatient] = useState<Patient | null>(null);
   const [visits, setVisits] = useState<Visit[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  // Modal for updating test result
-  const [activeTestEdit, setActiveTestEdit] = useState<{
-    visitId: number;
-    testId: number;
-    status: TestStatus;
-    result_value: string;
-  } | null>(null);
-  const [isUpdatingResult, setIsUpdatingResult] = useState(false);
 
   // Modal for ordering new test
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
@@ -53,41 +43,6 @@ export const PatientDetails: React.FC = () => {
   useEffect(() => {
     loadData();
   }, [loadData]);
-
-  const handleOpenUpdateModal = (
-    visitId: number,
-    testId: number,
-    status: TestStatus,
-    currentVal?: string
-  ) => {
-    setActiveTestEdit({
-      visitId,
-      testId,
-      status,
-      result_value: currentVal || '',
-    });
-  };
-
-  const handleSaveResult = async () => {
-    if (!activeTestEdit) return;
-    setIsUpdatingResult(true);
-    try {
-      await patientDetailsService.updateTestResult(
-        activeTestEdit.visitId,
-        activeTestEdit.testId,
-        {
-          status: activeTestEdit.status,
-          result_value: activeTestEdit.result_value,
-        }
-      );
-      setActiveTestEdit(null);
-      await loadData();
-    } catch (err: any) {
-      alert(err.message || 'Failed to update test result');
-    } finally {
-      setIsUpdatingResult(false);
-    }
-  };
 
   const handleOpenOrderModal = async () => {
     try {
@@ -130,20 +85,6 @@ export const PatientDetails: React.FC = () => {
     );
   }
 
-  // Flatten tests ordered across all patient visits
-  const flatTests: FlatTestRecord[] = [];
-  visits.forEach((v) => {
-    if (v.tests_ordered) {
-      v.tests_ordered.forEach((t) => {
-        flatTests.push({
-          visitId: v.id,
-          visitDate: v.visit_date || v.created_at,
-          testRecord: t,
-        });
-      });
-    }
-  });
-
   return (
     <div className={styles.container}>
       <div className={styles.topRow}>
@@ -162,69 +103,8 @@ export const PatientDetails: React.FC = () => {
 
       <div className={styles.grid}>
         <PatientInfo patient={patient} />
-        <TestHistory testRecords={flatTests} onUpdateResult={handleOpenUpdateModal} />
         <VisitHistory visits={visits} />
       </div>
-
-      {/* Edit Test Result Modal */}
-      <Modal
-        isOpen={Boolean(activeTestEdit)}
-        onClose={() => setActiveTestEdit(null)}
-        title="Update Diagnostic Result"
-      >
-        {activeTestEdit && (
-          <div className={styles.modalForm}>
-            <div className={styles.formGroup}>
-              <label>Processing Status</label>
-              <select
-                className={styles.select}
-                value={activeTestEdit.status}
-                onChange={(e) =>
-                  setActiveTestEdit({
-                    ...activeTestEdit,
-                    status: e.target.value as TestStatus,
-                  })
-                }
-              >
-                <option value="PENDING">PENDING</option>
-                <option value="SAMPLE_COLLECTED">SAMPLE_COLLECTED</option>
-                <option value="IN_PROGRESS">IN_PROGRESS</option>
-                <option value="COMPLETED">COMPLETED</option>
-                <option value="CANCELLED">CANCELLED</option>
-              </select>
-            </div>
-
-            <Input
-              label="Diagnostic Result Value"
-              placeholder="e.g. 14.2 g/dL, Negative, 98 mg/dL..."
-              value={activeTestEdit.result_value}
-              onChange={(e) =>
-                setActiveTestEdit({
-                  ...activeTestEdit,
-                  result_value: e.target.value,
-                })
-              }
-            />
-
-            <div className={styles.modalActions}>
-              <Button
-                variant="cancel"
-                onClick={() => setActiveTestEdit(null)}
-                disabled={isUpdatingResult}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="primary"
-                onClick={handleSaveResult}
-                isLoading={isUpdatingResult}
-              >
-                Save Result
-              </Button>
-            </div>
-          </div>
-        )}
-      </Modal>
 
       {/* New Lab Order Modal */}
       <Modal

@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import List, Optional
+from sqlalchemy import case
 from sqlalchemy.orm import Session, joinedload
 from app.models.visit import Visit, VisitTest, VisitStatus, TestStatus
 from app.models.test import Test
@@ -35,7 +36,19 @@ class VisitService:
             query = query.filter(Visit.patient_id == patient_id)
         if status is not None:
             query = query.filter(Visit.status == status)
-        return query.order_by(Visit.visit_date.desc()).offset(skip).limit(limit).all()
+
+        status_order = case(
+            (Visit.status == VisitStatus.SCHEDULED, 0),
+            (Visit.status == VisitStatus.IN_PROGRESS, 1),
+            (Visit.status == VisitStatus.COMPLETED, 2),
+            (Visit.status == VisitStatus.CANCELLED, 3),
+            else_=4,
+        )
+        effective_date = case(
+            (Visit.status == VisitStatus.COMPLETED, Visit.updated_at),
+            else_=Visit.visit_date,
+        )
+        return query.order_by(status_order, effective_date.desc(), Visit.id.desc()).offset(skip).limit(limit).all()
 
     @staticmethod
     def create(db: Session, obj_in: VisitCreate) -> Visit:

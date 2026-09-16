@@ -12,6 +12,7 @@ export interface AddTestModalProps {
   onClose: () => void;
   onSubmit: (formData: TestFormData) => Promise<void>;
   testToEdit?: LabTest | null;
+  existingTests?: LabTest[];
 }
 
 const initialForm: TestFormData = {
@@ -32,6 +33,7 @@ export const AddTestModal: React.FC<AddTestModalProps> = ({
   onClose,
   onSubmit,
   testToEdit,
+  existingTests = [],
 }) => {
   const [formData, setFormData] = useState<TestFormData>(initialForm);
   const [isLoading, setIsLoading] = useState(false);
@@ -41,7 +43,7 @@ export const AddTestModal: React.FC<AddTestModalProps> = ({
   useEffect(() => {
     if (testToEdit) {
       setFormData({
-        code: testToEdit.code,
+        code: (testToEdit.code || '').toUpperCase(),
         name: testToEdit.name,
         category: testToEdit.category || '',
         description: testToEdit.description || '',
@@ -62,6 +64,14 @@ export const AddTestModal: React.FC<AddTestModalProps> = ({
 
   const isReadOnly = Boolean(testToEdit && !isEditing);
 
+  const trimmedCode = (formData.code || '').trim().toUpperCase();
+  const isDuplicateCode = Boolean(
+    trimmedCode &&
+    existingTests.some(
+      (t) => t.code?.trim().toUpperCase() === trimmedCode && t.id !== testToEdit?.id
+    )
+  );
+
   const selfCharges = parseFloat(String(formData.price)) || 0;
   const b2bCharges = parseFloat(String(formData.b2b_price)) || 0;
   const profit = selfCharges - b2bCharges;
@@ -73,6 +83,7 @@ export const AddTestModal: React.FC<AddTestModalProps> = ({
   };
 
   const isFormValid = Boolean(
+    !isDuplicateCode &&
     formData.code?.trim() &&
     formData.name?.trim() &&
     formData.price !== '' &&
@@ -97,6 +108,10 @@ export const AddTestModal: React.FC<AddTestModalProps> = ({
       setError('Please fill in required fields: code, name, and price.');
       return;
     }
+    if (isDuplicateCode) {
+      setError(`A test with code '${trimmedCode}' already exists. Test codes must be unique.`);
+      return;
+    }
     if (formData.is_b2b) {
       if (!formData.b2b_name || !formData.b2b_name.trim()) {
         setError('Please enter the B2B partner name.');
@@ -110,7 +125,10 @@ export const AddTestModal: React.FC<AddTestModalProps> = ({
     setIsLoading(true);
     setError(null);
     try {
-      await onSubmit(formData);
+      await onSubmit({
+        ...formData,
+        code: trimmedCode,
+      });
       setFormData(initialForm);
       onClose();
     } catch (err: any) {
@@ -142,7 +160,11 @@ export const AddTestModal: React.FC<AddTestModalProps> = ({
             disabled={isReadOnly}
             placeholder="e.g. CBC, LIPID, TSH"
             value={formData.code}
-            onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
+            error={isDuplicateCode ? `Test code '${trimmedCode}' already exists` : undefined}
+            style={{ textTransform: 'uppercase' }}
+            onChange={(e) =>
+              setFormData({ ...formData, code: e.target.value.toUpperCase().replace(/\s+/g, '') })
+            }
           />
           <Input
             label="Category"

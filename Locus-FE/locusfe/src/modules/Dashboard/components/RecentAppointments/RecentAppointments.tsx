@@ -49,6 +49,31 @@ export const RecentAppointments: React.FC<RecentAppointmentsProps> = ({ appointm
     }
   };
 
+  const sortedAppointments = [...appointments].sort((a, b) => {
+    const getPriority = (status: string) => {
+      if (status === 'SCHEDULED') return 0;
+      if (status === 'IN_PROGRESS') return 1;
+      if (status === 'COMPLETED') return 2;
+      if (status === 'CANCELLED') return 3;
+      return 4;
+    };
+    const diff = getPriority(a.status) - getPriority(b.status);
+    if (diff !== 0) return diff;
+
+    // For completed visits, sort by completion timestamp (updated_at) or id desc
+    if (a.status === 'COMPLETED' && b.status === 'COMPLETED') {
+      const timeA = new Date(a.updated_at || a.created_at || a.visit_date).getTime() || 0;
+      const timeB = new Date(b.updated_at || b.created_at || b.visit_date).getTime() || 0;
+      if (timeB !== timeA) return timeB - timeA;
+      return b.id - a.id;
+    }
+
+    const timeA = new Date(a.visit_date || a.created_at).getTime() || 0;
+    const timeB = new Date(b.visit_date || b.created_at).getTime() || 0;
+    if (timeB !== timeA) return timeB - timeA;
+    return b.id - a.id;
+  });
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -62,7 +87,7 @@ export const RecentAppointments: React.FC<RecentAppointmentsProps> = ({ appointm
         </Link>
       </div>
 
-      {appointments.length === 0 ? (
+      {sortedAppointments.length === 0 ? (
         <div className={styles.empty}>
           <span>No scheduled appointments yet.</span>
           <Link
@@ -80,7 +105,7 @@ export const RecentAppointments: React.FC<RecentAppointmentsProps> = ({ appointm
         </div>
       ) : (
         <div className={styles.list}>
-          {appointments.map((apt) => {
+          {sortedAppointments.map((apt) => {
             const patient = apt.patient;
             const initials = patient?.first_name
               ? patient.first_name[0].toUpperCase()
@@ -164,12 +189,17 @@ export const RecentAppointments: React.FC<RecentAppointmentsProps> = ({ appointm
       {selectedVisit && (
         <AppointmentDetailModal
           visit={selectedVisit}
-          onClose={() => setSelectedVisit(null)}
+          onClose={() => {
+            setSelectedVisit(null);
+            onRefresh?.();
+          }}
           onEdit={(visit) => {
             setSelectedVisit(null);
             navigate(`/appointments/edit/${visit.id}`);
           }}
-          onUpdated={onRefresh}
+          onUpdated={() => {
+            onRefresh?.();
+          }}
         />
       )}
     </div>

@@ -1,6 +1,6 @@
 from typing import List, Optional
 from sqlalchemy.orm import Session
-from sqlalchemy import or_
+from sqlalchemy import or_, func
 from app.models.test import Test
 from app.schemas.test import TestCreate, TestUpdate
 
@@ -12,7 +12,7 @@ class TestService:
 
     @staticmethod
     def get_by_code(db: Session, code: str) -> Optional[Test]:
-        return db.query(Test).filter(Test.code == code).first()
+        return db.query(Test).filter(func.upper(Test.code) == code.strip().upper()).first()
 
     @staticmethod
     def get_multi(

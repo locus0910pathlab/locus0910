@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class TestBase(BaseModel):
@@ -14,6 +14,13 @@ class TestBase(BaseModel):
     is_b2b: Optional[bool] = False
     b2b_price: Optional[float] = Field(default=None, ge=0.0)
     b2b_name: Optional[str] = None
+
+    @field_validator('code')
+    @classmethod
+    def uppercase_code(cls, v: str) -> str:
+        if v:
+            return v.strip().upper()
+        return v
 
 
 class TestCreate(TestBase):
@@ -31,6 +38,13 @@ class TestUpdate(BaseModel):
     is_b2b: Optional[bool] = None
     b2b_price: Optional[float] = Field(default=None, ge=0.0)
     b2b_name: Optional[str] = None
+
+    @field_validator('code')
+    @classmethod
+    def uppercase_code(cls, v: Optional[str]) -> Optional[str]:
+        if v:
+            return v.strip().upper()
+        return v
 
 
 class TestResponse(TestBase):
