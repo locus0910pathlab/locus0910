@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List, Optional
 from sqlalchemy.orm import Session, joinedload
-from app.models.visit import Visit, VisitTest, VisitStatus
+from app.models.visit import Visit, VisitTest, VisitStatus, TestStatus
 from app.models.test import Test
 from app.schemas.visit import VisitCreate, VisitUpdate, VisitTestUpdate
 
@@ -87,6 +87,11 @@ class VisitService:
             for test in tests:
                 visit_test = VisitTest(visit_id=db_obj.id, test_id=test.id)
                 db.add(visit_test)
+
+        if db_obj.status == VisitStatus.COMPLETED and db_obj.tests_ordered:
+            for vt in db_obj.tests_ordered:
+                if vt.status == TestStatus.PENDING:
+                    vt.status = TestStatus.COMPLETED
 
         db.commit()
         db.refresh(db_obj)

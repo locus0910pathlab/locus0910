@@ -24,6 +24,17 @@ export const appointmentsService = {
   async updateAppointmentStatus(id: number, status: string): Promise<Visit> {
     return api.put<Visit>(`/visits/${id}`, { status });
   },
+
+  async completeAppointment(
+    id: number,
+    data: { total_amount: number; notes: string }
+  ): Promise<Visit> {
+    return api.put<Visit>(`/visits/${id}`, {
+      status: 'COMPLETED',
+      total_amount: data.total_amount,
+      notes: data.notes,
+    });
+  },
 };
 
 export default appointmentsService;

@@ -14,18 +14,17 @@ export const Dashboard: React.FC = () => {
   const [data, setData] = useState<DashboardData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    let mounted = true;
+  const loadData = React.useCallback(() => {
+    setIsLoading(true);
     dashboardService.getDashboardData().then((res) => {
-      if (mounted) {
-        setData(res);
-        setIsLoading(false);
-      }
+      setData(res);
+      setIsLoading(false);
     });
-    return () => {
-      mounted = false;
-    };
   }, []);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   const currentMonthShort = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(new Date()).toUpperCase();
 
@@ -88,7 +87,10 @@ export const Dashboard: React.FC = () => {
       </div>
 
       <div className={styles.contentGrid}>
-        <RecentAppointments appointments={data?.recentVisits || []} />
+        <RecentAppointments
+          appointments={data?.recentVisits || []}
+          onRefresh={loadData}
+        />
         <TestSummary tests={data?.popularTests || []} />
       </div>
     </div>

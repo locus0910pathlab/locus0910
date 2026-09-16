@@ -8,9 +8,10 @@ import styles from './RecentAppointments.module.css';
 
 export interface RecentAppointmentsProps {
   appointments: Visit[];
+  onRefresh?: () => void;
 }
 
-export const RecentAppointments: React.FC<RecentAppointmentsProps> = ({ appointments }) => {
+export const RecentAppointments: React.FC<RecentAppointmentsProps> = ({ appointments, onRefresh }) => {
   const navigate = useNavigate();
   const [selectedVisit, setSelectedVisit] = useState<Visit | null>(null);
   const renderStatusBadge = (status: string) => {
@@ -168,6 +169,7 @@ export const RecentAppointments: React.FC<RecentAppointmentsProps> = ({ appointm
             setSelectedVisit(null);
             navigate(`/appointments/edit/${visit.id}`);
           }}
+          onUpdated={onRefresh}
         />
       )}
     </div>

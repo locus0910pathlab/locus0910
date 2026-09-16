@@ -21,6 +21,7 @@ export const Appointments: React.FC = () => {
   const [sortBy, setSortBy] = useState<AppointmentSortOption>('date_desc');
   const [isLoading, setIsLoading] = useState(true);
   const [selectedVisit, setSelectedVisit] = useState<Visit | null>(null);
+  const [isCompletingDirectly, setIsCompletingDirectly] = useState(false);
 
   // Fetch appointments from API
   const fetchAppointments = useCallback(async () => {
@@ -156,7 +157,14 @@ export const Appointments: React.FC = () => {
       ) : (
         <AppointmentTable
           appointments={sortedAppointments}
-          onView={(visit) => setSelectedVisit(visit)}
+          onView={(visit) => {
+            setSelectedVisit(visit);
+            setIsCompletingDirectly(false);
+          }}
+          onComplete={(visit) => {
+            setSelectedVisit(visit);
+            setIsCompletingDirectly(true);
+          }}
           onDelete={handleDelete}
           onScheduleClick={() => navigate('/appointments/new')}
         />
@@ -166,11 +174,16 @@ export const Appointments: React.FC = () => {
       {selectedVisit && (
         <AppointmentDetailModal
           visit={selectedVisit}
-          onClose={() => setSelectedVisit(null)}
+          initialIsCompleting={isCompletingDirectly}
+          onClose={() => {
+            setSelectedVisit(null);
+            setIsCompletingDirectly(false);
+          }}
           onEdit={(visit) => {
             setSelectedVisit(null);
             navigate(`/appointments/edit/${visit.id}`);
           }}
+          onUpdated={fetchAppointments}
         />
       )}
     </div>

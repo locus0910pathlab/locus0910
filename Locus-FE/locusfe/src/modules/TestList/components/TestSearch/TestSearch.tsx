@@ -21,6 +21,7 @@ export const TestSearch: React.FC<TestSearchProps> = ({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         leftIcon={<Search size={16} />}
+        className={styles.searchInput}
       />
     </div>
   );

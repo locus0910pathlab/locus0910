@@ -1,11 +1,12 @@
 import React from 'react';
-import { Eye, Trash2, Phone } from 'lucide-react';
+import { Eye, Trash2, Phone, CheckCircle2 } from 'lucide-react';
 import { Visit } from '../../../../types/common.types';
 import styles from './AppointmentTable.module.css';
 
 export interface AppointmentTableProps {
   appointments: Visit[];
   onView: (visit: Visit) => void;
+  onComplete?: (visit: Visit) => void;
   onDelete?: (id: number) => void;
   onScheduleClick?: () => void;
 }
@@ -13,6 +14,7 @@ export interface AppointmentTableProps {
 export const AppointmentTable: React.FC<AppointmentTableProps> = ({
   appointments,
   onView,
+  onComplete,
   onDelete,
   onScheduleClick,
 }) => {
@@ -170,18 +172,29 @@ export const AppointmentTable: React.FC<AppointmentTableProps> = ({
                     <button
                       className={styles.viewBtn}
                       title="View Appointment Details"
+                      aria-label="View Appointment Details"
                       onClick={() => onView(apt)}
                     >
-                      <Eye size={14} />
-                      <span className={styles.actionText}>View</span>
+                      <Eye size={15} />
                     </button>
+                    {onComplete && apt.status === 'SCHEDULED' && (
+                      <button
+                        className={styles.completeBtn}
+                        title="Complete Appointment & Settle Discount"
+                        aria-label="Complete Appointment"
+                        onClick={() => onComplete(apt)}
+                      >
+                        <CheckCircle2 size={15} />
+                      </button>
+                    )}
                     {onDelete && apt.status === 'SCHEDULED' && (
                       <button
                         className={styles.deleteBtn}
                         title="Delete / Cancel Appointment"
+                        aria-label="Delete / Cancel Appointment"
                         onClick={() => onDelete(apt.id)}
                       >
-                        <Trash2 size={14} />
+                        <Trash2 size={15} />
                       </button>
                     )}
                   </div>

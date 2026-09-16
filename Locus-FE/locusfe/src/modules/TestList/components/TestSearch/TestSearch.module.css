@@ -1,11 +1,10 @@
 .container {
   flex: 1;
-  max-width: 360px;
+  width: 100%;
+  min-width: 0;
 }
 
-@media (max-width: 768px) {
-  .container {
-    max-width: 100%;
-    width: 100%;
-  }
+.searchInput {
+  height: 38px;
 }
+
