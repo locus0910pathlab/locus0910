@@ -399,7 +399,7 @@ export const CreateAppointment: React.FC = () => {
               <span>2. Schedule & Service Details</span>
             </h3>
 
-            <div className={styles.grid3}>
+            <div className={styles.grid2}>
               <Input
                 label="Appointment Date"
                 type="date"
@@ -436,9 +436,7 @@ export const CreateAppointment: React.FC = () => {
                   <option value="Priority Diagnostic">Priority Diagnostic / STAT</option>
                 </select>
               </div>
-            </div>
 
-            <div className={styles.grid2}>
               <Input
                 label="Referring Physician / Clinic"
                 placeholder="Dr. Smith, City Hospital..."
@@ -447,18 +445,6 @@ export const CreateAppointment: React.FC = () => {
                   setFormData({ ...formData, referring_doctor: e.target.value })
                 }
               />
-
-              <div className={styles.fieldGroup}>
-                <label className={styles.label}>Preparation & Clinical Instructions</label>
-                <textarea
-                  className={styles.textarea}
-                  placeholder="Fasting required (12h), morning first urine, avoid medication..."
-                  value={formData.notes}
-                  onChange={(e) =>
-                    setFormData({ ...formData, notes: e.target.value })
-                  }
-                />
-              </div>
             </div>
           </div>
 

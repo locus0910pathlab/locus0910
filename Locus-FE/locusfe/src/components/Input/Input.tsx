@@ -1,4 +1,6 @@
 import React from 'react';
+import { Clock } from 'lucide-react';
+import { CalendarIcon } from '../CalendarIcon/CalendarIcon';
 import styles from './Input.module.css';
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -19,17 +21,37 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(({
   required,
   className = '',
   id,
+  type,
+  onClick,
   ...props
 }, ref) => {
   const inputId = id || (label ? label.toLowerCase().replace(/\s+/g, '-') : undefined);
 
+  let defaultRightIcon = rightIcon;
+  if (!defaultRightIcon) {
+    if (type === 'date') {
+      defaultRightIcon = <CalendarIcon size={18} />;
+    } else if (type === 'time') {
+      defaultRightIcon = <Clock size={16} color="#f8bc25" />;
+    }
+  }
+
   const inputClasses = [
     styles.input,
     leftIcon ? styles.hasLeftIcon : '',
-    rightIcon ? styles.hasRightIcon : '',
+    defaultRightIcon ? styles.hasRightIcon : '',
     error ? styles.error : '',
     className,
   ].filter(Boolean).join(' ');
+
+  const handleClick = (e: React.MouseEvent<HTMLInputElement>) => {
+    if ((type === 'date' || type === 'time') && typeof (e.currentTarget as any).showPicker === 'function') {
+      try {
+        (e.currentTarget as any).showPicker();
+      } catch (_) {}
+    }
+    onClick?.(e);
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -44,10 +66,12 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(({
         <input
           id={inputId}
           ref={ref}
+          type={type}
           className={inputClasses}
+          onClick={handleClick}
           {...props}
         />
-        {rightIcon && <span className={styles.rightIcon}>{rightIcon}</span>}
+        {defaultRightIcon && <span className={styles.rightIcon}>{defaultRightIcon}</span>}
       </div>
       {error && <span className={styles.errorMessage}>{error}</span>}
       {!error && helperText && <span className={styles.helperText}>{helperText}</span>}
