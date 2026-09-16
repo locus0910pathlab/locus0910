@@ -33,8 +33,9 @@ export const Dashboard: React.FC = () => {
     <div className={styles.dashboard}>
       <div className={styles.quickActions}>
         <div className={styles.quickActionText}>
+          <div className={styles.servicePill}>ALL TYPES OF BLOOD & URINE TESTS DONE HERE</div>
           <h2>Clinical Laboratory Command Center</h2>
-          <p>Register new incoming patients, order diagnostic panels, and track test progress in real-time.</p>
+          <p>Precision in Diagnosis, Excellence in Care • Register incoming patients, order diagnostic panels, and track reports.</p>
         </div>
         <div className={styles.actionButtons}>
           <Button

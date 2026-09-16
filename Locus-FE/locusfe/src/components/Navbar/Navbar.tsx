@@ -40,6 +40,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
           <Menu size={20} />
         </button>
         <h1 className={styles.pageTitle}>{title}</h1>
+        <span className={styles.labBadge}>Precision in Diagnosis, Excellence in Care</span>
       </div>
 
       <div className={styles.right}>

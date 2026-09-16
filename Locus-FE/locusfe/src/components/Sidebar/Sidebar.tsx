@@ -5,11 +5,11 @@ import {
   Users,
   Calendar,
   FlaskConical,
-  Stethoscope,
   ChevronLeft,
   ChevronRight,
   X,
 } from 'lucide-react';
+import logoImg from '../../assets/logo.png';
 import styles from './Sidebar.module.css';
 
 export interface SidebarProps {
@@ -44,13 +44,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
       >
         <div className={styles.brand}>
           <div className={styles.brandLeft}>
-            <div className={styles.logoIcon}>
-              <Stethoscope size={20} />
-            </div>
-            {!isCollapsed && (
-              <div className={styles.brandInfo}>
-                <div className={styles.brandName}>LocusLab</div>
-                <div className={styles.brandSub}>Clinical Diagnostics</div>
+            {!isCollapsed ? (
+              <div className={styles.logoExpandedWrapper}>
+                <img src={logoImg} alt="Locus Pathology Lab" className={styles.logoImg} />
+              </div>
+            ) : (
+              <div className={styles.logoCollapsedWrapper} title="Locus Pathology Lab">
+                <img src={logoImg} alt="Locus Pathology Lab" className={styles.logoImgCollapsed} />
               </div>
             )}
           </div>
@@ -100,11 +100,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </nav>
 
         <div className={styles.footer}>
-          <div className={styles.avatar}>LL</div>
+          <div className={styles.avatar}>AC</div>
           {!isCollapsed && (
             <div className={styles.userInfo}>
-              <span className={styles.userName}>Lab Staff</span>
-              <span className={styles.userRole}>Technician / Admin</span>
+              <span className={styles.userName}>Abhijeet Chavan</span>
+              <span className={styles.userRole}>Founder & Lab Admin</span>
             </div>
           )}
         </div>
