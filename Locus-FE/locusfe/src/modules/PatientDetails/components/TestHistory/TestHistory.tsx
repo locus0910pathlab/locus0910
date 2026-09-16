@@ -1,4 +1,5 @@
 import React from 'react';
+import { Edit2 } from 'lucide-react';
 import { VisitTest, TestStatus } from '../../../../types/common.types';
 import styles from './TestHistory.module.css';
 
@@ -59,6 +60,7 @@ export const TestHistory: React.FC<TestHistoryProps> = ({
                   <td style={{ textAlign: 'right' }}>
                     <button
                       className={styles.editBtn}
+                      title="Update Diagnostic Result"
                       onClick={() =>
                         onUpdateResult(
                           visitId,
@@ -68,7 +70,8 @@ export const TestHistory: React.FC<TestHistoryProps> = ({
                         )
                       }
                     >
-                      Update Result
+                      <Edit2 size={13} />
+                      <span className={styles.actionText}>Update Result</span>
                     </button>
                   </td>
                 </tr>

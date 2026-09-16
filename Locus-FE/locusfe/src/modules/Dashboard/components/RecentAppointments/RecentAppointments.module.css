@@ -308,6 +308,18 @@
   }
 }
 
+@media (max-width: 600px) {
+  .viewBtn {
+    padding: 6px 8px;
+    gap: 0;
+    justify-content: center;
+  }
+
+  .actionText {
+    display: none !important;
+  }
+}
+
 @media (max-width: 480px) {
   .container {
     padding: 16px 14px;

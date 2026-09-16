@@ -173,7 +173,7 @@ export const AppointmentTable: React.FC<AppointmentTableProps> = ({
                       onClick={() => onView(apt)}
                     >
                       <Eye size={14} />
-                      <span>View</span>
+                      <span className={styles.actionText}>View</span>
                     </button>
                     {onDelete && apt.status === 'SCHEDULED' && (
                       <button

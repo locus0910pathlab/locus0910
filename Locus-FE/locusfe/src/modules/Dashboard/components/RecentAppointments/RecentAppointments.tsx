@@ -126,7 +126,7 @@ export const RecentAppointments: React.FC<RecentAppointmentsProps> = ({ appointm
                     <span>{formattedDate}</span>
                   </div>
                   <div className={styles.time}>
-                    <Clock size={11} color="var(--text-muted)" />
+                    <Clock size={11} color="#f8bc25" />
                     <span>{formattedTime}</span>
                   </div>
                 </div>
@@ -150,7 +150,7 @@ export const RecentAppointments: React.FC<RecentAppointmentsProps> = ({ appointm
                     }}
                   >
                     <Eye size={14} />
-                    <span>View</span>
+                    <span className={styles.actionText}>View</span>
                   </button>
                 </div>
               </div>

@@ -104,7 +104,7 @@ export const PatientTable: React.FC<PatientTableProps> = ({
                       onClick={() => navigate(`/patients/${patient.id}`)}
                     >
                       <Eye size={14} />
-                      <span>View</span>
+                      <span className={styles.actionText}>View</span>
                     </button>
                     {onDelete && (
                       <button

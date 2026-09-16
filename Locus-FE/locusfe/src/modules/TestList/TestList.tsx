@@ -63,11 +63,21 @@ export const TestList: React.FC = () => {
     }
   };
 
+  const hasActiveFilters = Boolean(search.trim() || categoryFilter);
+
+  const handleClearFilters = () => {
+    setSearch('');
+    setCategoryFilter('');
+  };
+
   const categories = Array.from(
     new Set(tests.map((t) => t.category).filter(Boolean) as string[])
   );
 
   const filteredTests = tests.filter((t) => {
+    if (categoryFilter && t.category !== categoryFilter) {
+      return false;
+    }
     if (search.trim()) {
       const q = search.toLowerCase();
       const matches =
@@ -82,7 +92,7 @@ export const TestList: React.FC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.topBar}>
-        <div className={styles.controls}>
+        <div className={styles.searchRow}>
           <TestSearch value={search} onChange={setSearch} />
           <select
             className={styles.select}
@@ -97,7 +107,18 @@ export const TestList: React.FC = () => {
               </option>
             ))}
           </select>
+          <button
+            type="button"
+            className={`${styles.clearBtn} ${hasActiveFilters ? styles.clearBtnActive : ''}`}
+            onClick={handleClearFilters}
+            disabled={!hasActiveFilters}
+            title="Reset search and filters"
+          >
+            Clear
+          </button>
+        </div>
 
+        <div className={styles.actionsRow}>
           <div className={styles.viewToggle}>
             <button
               className={`${styles.toggleBtn} ${viewMode === 'table' ? styles.active : ''}`}
@@ -114,11 +135,15 @@ export const TestList: React.FC = () => {
               <LayoutGrid size={18} />
             </button>
           </div>
-        </div>
 
-        <Button leftIcon={<PlusCircle size={17} />} onClick={handleOpenCreateModal}>
-          Add Test
-        </Button>
+          <Button
+            className={styles.addTestBtn}
+            leftIcon={<PlusCircle size={17} />}
+            onClick={handleOpenCreateModal}
+          >
+            Add Test
+          </Button>
+        </div>
       </div>
 
       {isLoading ? (

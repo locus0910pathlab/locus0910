@@ -54,7 +54,7 @@ export const TestTable: React.FC<TestTableProps> = ({ tests, onEdit, onView, onD
               </td>
               <td className={styles.desktopOnly}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: 'var(--text-secondary)' }}>
-                  <Clock size={14} color="var(--text-muted)" />
+                  <Clock size={14} color="#f8bc25ff" />
                   <span>{test.turnaround_hours || 24}h</span>
                 </div>
               </td>

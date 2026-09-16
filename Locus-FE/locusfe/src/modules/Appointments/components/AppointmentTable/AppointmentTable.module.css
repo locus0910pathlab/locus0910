@@ -290,6 +290,18 @@
   }
 }
 
+@media (max-width: 600px) {
+  .viewBtn {
+    padding: 6px 8px;
+    gap: 0;
+    justify-content: center;
+  }
+
+  .actionText {
+    display: none !important;
+  }
+}
+
 /* Desktop Column Width Alignment with Top Filter Bar */
 @media (min-width: 1281px) {
   .table {

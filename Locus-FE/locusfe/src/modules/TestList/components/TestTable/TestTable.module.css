@@ -159,3 +159,15 @@
     padding: 6px 8px;
   }
 }
+
+@media (max-width: 600px) {
+  .viewBtn {
+    padding: 6px 8px;
+    gap: 0;
+    justify-content: center;
+  }
+
+  .actionText {
+    display: none !important;
+  }
+}

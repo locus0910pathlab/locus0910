@@ -33,7 +33,7 @@ export const TestCard: React.FC<TestCardProps> = ({ test, onEdit, onView, onDele
         <div className={styles.priceMeta}>
           <div className={styles.price}>₹{Number(test.price).toFixed(2)}</div>
           <div className={styles.meta}>
-            <Clock size={13} />
+            <Clock size={13} color="#f8bc25" />
             <span>{test.turnaround_hours || 24}h turnaround</span>
           </div>
         </div>
