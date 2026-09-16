@@ -16,6 +16,9 @@ class Test(Base):
     price: Mapped[float] = mapped_column(Float, default=0.0, nullable=False)
     turnaround_hours: Mapped[Optional[int]] = mapped_column(Integer, default=24, nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    is_b2b: Mapped[bool] = mapped_column(Boolean, default=False, nullable=True)
+    b2b_price: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    b2b_name: Mapped[Optional[str]] = mapped_column(String(150), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=func.now(), nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=func.now(), onupdate=func.now(), nullable=False)
 

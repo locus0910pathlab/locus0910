@@ -339,10 +339,173 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 20px;
+  padding: 16px 20px;
   background-color: var(--bg-subtle);
   border-radius: var(--radius-md);
   margin-top: 8px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.summaryLeft {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.summaryCount {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.discountRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.discountLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.discountInputWrapper {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  height: 34px;
+  box-shadow: var(--shadow-sm);
+}
+
+.discountInput {
+  width: 72px;
+  height: 100%;
+  border: none;
+  padding: 0 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: transparent;
+  outline: none;
+  -moz-appearance: textfield;
+}
+
+.discountInput::-webkit-outer-spin-button,
+.discountInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.discountToggleGroup {
+  display: flex;
+  height: 100%;
+  border-left: 1px solid var(--border-subtle);
+  background-color: var(--bg-subtle);
+}
+
+.discountToggleBtn {
+  border: none;
+  background: transparent;
+  padding: 0 10px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.discountToggleBtn:hover:not(.discountToggleActive) {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--text-primary);
+}
+
+.discountToggleActive {
+  background-color: var(--primary-600);
+  color: #ffffff;
+}
+
+.summaryRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.breakdownRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.breakdownLabel {
+  font-weight: 500;
+}
+
+.breakdownSubtotal {
+  font-weight: 600;
+  color: var(--text-secondary);
+  min-width: 80px;
+  text-align: right;
+  text-decoration: line-through;
+  opacity: 0.85;
+}
+
+.breakdownDiscount {
+  font-weight: 700;
+  color: var(--accent-rose);
+  min-width: 80px;
+  text-align: right;
+}
+
+.totalRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.totalLabel {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--accent-emerald);
+}
+
+.totalValue {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--accent-emerald);
+  min-width: 80px;
+  text-align: right;
+}
+
+@media (max-width: 640px) {
+  .summaryBar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .summaryLeft {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .summaryRight {
+    width: 100%;
+    align-items: flex-end;
+    border-top: 1px dashed var(--border-subtle);
+    padding-top: 10px;
+  }
 }
 
 .actions {

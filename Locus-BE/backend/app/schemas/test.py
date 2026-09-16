@@ -11,6 +11,9 @@ class TestBase(BaseModel):
     price: float = Field(default=0.0, ge=0.0)
     turnaround_hours: Optional[int] = Field(default=24, ge=0)
     is_active: bool = True
+    is_b2b: Optional[bool] = False
+    b2b_price: Optional[float] = Field(default=None, ge=0.0)
+    b2b_name: Optional[str] = None
 
 
 class TestCreate(TestBase):
@@ -25,6 +28,9 @@ class TestUpdate(BaseModel):
     price: Optional[float] = Field(None, ge=0.0)
     turnaround_hours: Optional[int] = Field(None, ge=0)
     is_active: Optional[bool] = None
+    is_b2b: Optional[bool] = None
+    b2b_price: Optional[float] = Field(default=None, ge=0.0)
+    b2b_name: Optional[str] = None
 
 
 class TestResponse(TestBase):

@@ -30,7 +30,7 @@ export const CreateAppointment: React.FC = () => {
     appointment_time: '10:00',
     appointment_type: 'Lab Visit',
     selectedTestIds: [],
-    referring_doctor: '',
+    referring_doctor: 'Self',
     notes: '',
   });
 
@@ -52,6 +52,10 @@ export const CreateAppointment: React.FC = () => {
   const [testSearch, setTestSearch] = useState('');
   const [debouncedTestSearch, setDebouncedTestSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
+
+  // Discount state (% or direct fixed ₹)
+  const [discountType, setDiscountType] = useState<'percent' | 'fixed'>('percent');
+  const [discountValue, setDiscountValue] = useState<string>('');
 
   // Load available tests
   useEffect(() => {
@@ -87,7 +91,7 @@ export const CreateAppointment: React.FC = () => {
             : '10:00';
 
           let apptType: 'Lab Visit' | 'Home Sample Collection' | 'Priority Diagnostic' = 'Lab Visit';
-          let refDoc = '';
+          let refDoc = 'Self';
           let instructions = '';
 
           if (visit.notes) {
@@ -108,6 +112,18 @@ export const CreateAppointment: React.FC = () => {
             if (doctorMatch) refDoc = doctorMatch[1].trim();
             if (instrMatch) instructions = instrMatch[1].trim();
             else if (!typeMatch && !doctorMatch) instructions = visit.notes;
+
+            const discountMatch = visit.notes.match(/Discount:\s*([^\s|]+)/i);
+            if (discountMatch) {
+              const matchedStr = discountMatch[1].trim();
+              if (matchedStr.includes('%')) {
+                setDiscountType('percent');
+                setDiscountValue(matchedStr.replace('%', '').trim());
+              } else {
+                setDiscountType('fixed');
+                setDiscountValue(matchedStr.replace('₹', '').trim());
+              }
+            }
           }
 
           setFormData({
@@ -222,10 +238,34 @@ export const CreateAppointment: React.FC = () => {
   );
   const totalPrice = selectedTests.reduce((sum, t) => sum + Number(t.price), 0);
 
+  // Discount calculations
+  const parsedDiscount = parseFloat(discountValue) || 0;
+  let discountAmount = 0;
+  if (parsedDiscount > 0 && totalPrice > 0) {
+    if (discountType === 'percent') {
+      const clampedPercent = Math.min(100, Math.max(0, parsedDiscount));
+      discountAmount = (totalPrice * clampedPercent) / 100;
+    } else {
+      discountAmount = Math.min(totalPrice, Math.max(0, parsedDiscount));
+    }
+  }
+  const finalPrice = Math.max(0, totalPrice - discountAmount);
+
+  const isFormValid = Boolean(
+    formData.patient_id &&
+    formData.appointment_date &&
+    formData.appointment_date.trim() &&
+    formData.selectedTestIds.length > 0
+  );
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.patient_id) {
       setError('Please search and select a patient for this appointment.');
+      return;
+    }
+    if (!formData.appointment_date || !formData.appointment_date.trim()) {
+      setError('Please select an appointment date.');
       return;
     }
     if (formData.selectedTestIds.length === 0) {
@@ -236,12 +276,19 @@ export const CreateAppointment: React.FC = () => {
     setIsSubmitting(true);
     setError(null);
 
+    const payload: AppointmentFormData = {
+      ...formData,
+      discount_type: parsedDiscount > 0 ? discountType : undefined,
+      discount_value: parsedDiscount > 0 ? parsedDiscount : undefined,
+      total_amount: finalPrice,
+    };
+
     try {
       if (isEditMode && visitId) {
-        const visit = await createAppointmentService.updateAppointment(visitId, formData);
+        const visit = await createAppointmentService.updateAppointment(visitId, payload);
         setCreatedVisit(visit);
       } else {
-        const visit = await createAppointmentService.submitAppointment(formData);
+        const visit = await createAppointmentService.submitAppointment(payload);
         setCreatedVisit(visit);
       }
     } catch (err: any) {
@@ -316,7 +363,10 @@ export const CreateAppointment: React.FC = () => {
           <div className={styles.section}>
             <h3 className={styles.sectionTitle}>
               <User size={18} color="var(--primary-600)" />
-              <span>{isEditMode ? '1. Patient Details' : '1. Select Patient'}</span>
+              <span>
+                {isEditMode ? '1. Patient Details' : '1. Select Patient'}{' '}
+                <span style={{ color: 'var(--accent-rose)' }}>*</span>
+              </span>
             </h3>
 
             {selectedPatient ? (
@@ -462,7 +512,10 @@ export const CreateAppointment: React.FC = () => {
             >
               <h3 className={styles.sectionTitle} style={{ margin: 0 }}>
                 <Stethoscope size={18} color="var(--primary-600)" />
-                <span>3. Prescribe Laboratory Panels</span>
+                <span>
+                  3. Prescribe Laboratory Panels{' '}
+                  <span style={{ color: 'var(--accent-rose)' }}>*</span>
+                </span>
               </h3>
               {availableTests.length > 0 && (
                 <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
@@ -565,13 +618,78 @@ export const CreateAppointment: React.FC = () => {
 
             {formData.selectedTestIds.length > 0 && (
               <div className={styles.summaryBar}>
-                <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
-                  {formData.selectedTestIds.length}{' '}
-                  {formData.selectedTestIds.length === 1 ? 'test' : 'tests'} selected
-                </span>
-                <span style={{ fontSize: '17px', fontWeight: 800, color: 'var(--accent-emerald)' }}>
-                  Total: ₹{totalPrice.toFixed(2)}
-                </span>
+                <div className={styles.summaryLeft}>
+                  <span className={styles.summaryCount}>
+                    {formData.selectedTestIds.length}{' '}
+                    {formData.selectedTestIds.length === 1 ? 'test' : 'tests'} selected
+                  </span>
+
+                  <div className={styles.discountRow}>
+                    <span className={styles.discountLabel}>Discount:</span>
+                    <div className={styles.discountInputWrapper}>
+                      <input
+                        type="number"
+                        min="0"
+                        max={discountType === 'percent' ? 100 : totalPrice}
+                        step="any"
+                        placeholder="0"
+                        value={discountValue}
+                        onChange={(e) => setDiscountValue(e.target.value)}
+                        className={styles.discountInput}
+                      />
+                      <div className={styles.discountToggleGroup}>
+                        <button
+                          type="button"
+                          className={`${styles.discountToggleBtn} ${
+                            discountType === 'percent' ? styles.discountToggleActive : ''
+                          }`}
+                          onClick={() => setDiscountType('percent')}
+                          title="Percentage discount (%)"
+                        >
+                          %
+                        </button>
+                        <button
+                          type="button"
+                          className={`${styles.discountToggleBtn} ${
+                            discountType === 'fixed' ? styles.discountToggleActive : ''
+                          }`}
+                          onClick={() => setDiscountType('fixed')}
+                          title="Direct price reduction (₹)"
+                        >
+                          ₹
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className={styles.summaryRight}>
+                  {discountAmount > 0 ? (
+                    <>
+                      <div className={styles.breakdownRow}>
+                        <span className={styles.breakdownLabel}>Subtotal:</span>
+                        <span className={styles.breakdownSubtotal}>₹{totalPrice.toFixed(2)}</span>
+                      </div>
+                      <div className={styles.breakdownRow}>
+                        <span className={styles.breakdownLabel}>
+                          Discount {discountType === 'percent' ? `(${parsedDiscount}%)` : ''}:
+                        </span>
+                        <span className={styles.breakdownDiscount}>
+                          -₹{discountAmount.toFixed(2)}
+                        </span>
+                      </div>
+                      <div className={styles.totalRow}>
+                        <span className={styles.totalLabel}>Total:</span>
+                        <span className={styles.totalValue}>₹{finalPrice.toFixed(2)}</span>
+                      </div>
+                    </>
+                  ) : (
+                    <div className={styles.totalRow}>
+                      <span className={styles.totalLabel}>Total:</span>
+                      <span className={styles.totalValue}>₹{totalPrice.toFixed(2)}</span>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </div>
@@ -590,6 +708,7 @@ export const CreateAppointment: React.FC = () => {
               type="submit"
               variant="primary"
               isLoading={isSubmitting}
+              disabled={!isFormValid || isSubmitting}
               leftIcon={<CalendarCheck size={17} />}
             >
               {isEditMode ? 'Confirm & Save Changes' : 'Confirm & Book Appointment'}

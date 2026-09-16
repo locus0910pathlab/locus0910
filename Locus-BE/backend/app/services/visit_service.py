@@ -46,6 +46,9 @@ class VisitService:
             tests = db.query(Test).filter(Test.id.in_(obj_in.test_ids)).all()
             total_amount = sum(t.price for t in tests)
 
+        if obj_in.total_amount is not None:
+            total_amount = obj_in.total_amount
+
         db_visit = Visit(
             patient_id=obj_in.patient_id,
             visit_date=obj_in.visit_date or datetime.now(),
@@ -79,7 +82,8 @@ class VisitService:
             # Delete old visit tests and replace with updated tests
             db.query(VisitTest).filter(VisitTest.visit_id == db_obj.id).delete()
             tests = db.query(Test).filter(Test.id.in_(test_ids)).all() if test_ids else []
-            db_obj.total_amount = sum(t.price for t in tests)
+            if "total_amount" not in update_data or update_data["total_amount"] is None:
+                db_obj.total_amount = sum(t.price for t in tests)
             for test in tests:
                 visit_test = VisitTest(visit_id=db_obj.id, test_id=test.id)
                 db.add(visit_test)

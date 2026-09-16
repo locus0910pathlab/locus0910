@@ -39,7 +39,10 @@ export const TestTable: React.FC<TestTableProps> = ({ tests, onEdit, onView, onD
           {tests.map((test) => (
             <tr key={test.id}>
               <td>
-                <span className={styles.codeBadge}>{test.code}</span>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                  <span className={styles.codeBadge}>{test.code}</span>
+                  {test.is_b2b && <span className={styles.b2bBadge}>B2B</span>}
+                </div>
               </td>
               <td className={styles.desktopOnly}>
                 <div style={{ fontWeight: 600 }}>{test.name}</div>
@@ -59,7 +62,19 @@ export const TestTable: React.FC<TestTableProps> = ({ tests, onEdit, onView, onD
                 </div>
               </td>
               <td className={styles.priceCol}>
-                <span className={styles.price}>₹{Number(test.price).toFixed(2)}</span>
+                <div className={styles.priceContainer}>
+                  <span className={styles.price}>₹{Number(test.price).toFixed(2)}</span>
+                  {test.is_b2b && test.b2b_price != null && (
+                    <div className={styles.b2bPriceSubtext}>
+                      <span className={styles.b2bCost}>
+                        - ₹{Number(test.b2b_price).toFixed(2)}
+                      </span>
+                      <span className={styles.b2bProfit}>
+                        Profit: ₹{(Number(test.price) - Number(test.b2b_price)).toFixed(2)}
+                      </span>
+                    </div>
+                  )}
+                </div>
               </td>
               <td className={`${styles.desktopOnly} ${styles.centerTd}`}>
                 <span className={styles.activeStatus}>

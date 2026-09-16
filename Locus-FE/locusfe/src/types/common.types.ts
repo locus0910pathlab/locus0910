@@ -29,6 +29,9 @@ export interface LabTest {
   price: number;
   turnaround_hours?: number;
   is_active: boolean;
+  is_b2b?: boolean;
+  b2b_price?: number | null;
+  b2b_name?: string | null;
   created_at: string;
   updated_at: string;
 }

@@ -18,7 +18,10 @@ export const TestCard: React.FC<TestCardProps> = ({ test, onEdit, onView, onDele
       <div>
         <div className={styles.header}>
           <div>
-            <span className={styles.codeBadge}>{test.code}</span>
+            <div style={{ display: 'inline-flex', alignItems: 'center', marginBottom: '6px' }}>
+              <span className={styles.codeBadge} style={{ marginBottom: 0 }}>{test.code}</span>
+              {test.is_b2b && <span className={styles.b2bBadge}>B2B</span>}
+            </div>
             <h4 className={styles.name}>{test.name}</h4>
           </div>
           <span className={styles.categoryTag}>{test.category || 'General'}</span>
@@ -32,6 +35,16 @@ export const TestCard: React.FC<TestCardProps> = ({ test, onEdit, onView, onDele
       <div className={styles.footer}>
         <div className={styles.priceMeta}>
           <div className={styles.price}>₹{Number(test.price).toFixed(2)}</div>
+          {test.is_b2b && test.b2b_price != null && (
+            <div className={styles.b2bPriceSubtext}>
+              <span className={styles.b2bCost}>
+                - ₹{Number(test.b2b_price).toFixed(2)}
+              </span>
+              <span className={styles.b2bProfit}>
+                Profit: ₹{(Number(test.price) - Number(test.b2b_price)).toFixed(2)}
+              </span>
+            </div>
+          )}
           <div className={styles.meta}>
             <Clock size={13} color="#f8bc25" />
             <span>{test.turnaround_hours || 24}h turnaround</span>

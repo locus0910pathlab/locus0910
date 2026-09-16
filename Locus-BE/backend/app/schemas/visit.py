@@ -34,6 +34,7 @@ class VisitBase(BaseModel):
     patient_id: int
     notes: Optional[str] = None
     visit_date: Optional[datetime] = None
+    total_amount: Optional[float] = None
 
 
 class VisitCreate(VisitBase):
@@ -46,6 +47,7 @@ class VisitUpdate(BaseModel):
     visit_date: Optional[datetime] = None
     patient_id: Optional[int] = None
     test_ids: Optional[List[int]] = None
+    total_amount: Optional[float] = None
 
 
 class VisitResponse(BaseModel):

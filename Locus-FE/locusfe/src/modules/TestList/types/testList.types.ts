@@ -8,6 +8,9 @@ export interface TestFormData {
   price: number | string;
   turnaround_hours: number | string;
   is_active: boolean;
+  is_b2b?: boolean;
+  b2b_price?: number | string;
+  b2b_name?: string;
 }
 
 export interface TestListFilters {

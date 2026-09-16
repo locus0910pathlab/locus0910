@@ -53,6 +53,13 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(({
     onClick?.(e);
   };
 
+  const handleWheel = (e: React.WheelEvent<HTMLInputElement>) => {
+    if (type === 'number') {
+      e.currentTarget.blur();
+    }
+    props.onWheel?.(e);
+  };
+
   return (
     <div className={styles.wrapper}>
       {label && (
@@ -69,6 +76,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(({
           type={type}
           className={inputClasses}
           onClick={handleClick}
+          onWheel={handleWheel}
           {...props}
         />
         {defaultRightIcon && <span className={styles.rightIcon}>{defaultRightIcon}</span>}

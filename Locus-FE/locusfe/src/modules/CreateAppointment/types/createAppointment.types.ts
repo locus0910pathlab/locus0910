@@ -6,6 +6,9 @@ export interface AppointmentFormData {
   selectedTestIds: number[];
   referring_doctor?: string;
   notes?: string;
+  discount_type?: 'percent' | 'fixed';
+  discount_value?: number;
+  total_amount?: number;
 }
 
 export interface AppointmentFormErrors {

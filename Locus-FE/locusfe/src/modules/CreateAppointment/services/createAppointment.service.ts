@@ -27,9 +27,15 @@ export const createAppointmentService = {
       ? `${data.appointment_date}T09:00:00`
       : new Date().toISOString();
 
+    const discountNote =
+      data.discount_value && data.discount_value > 0
+        ? `Discount: ${data.discount_type === 'percent' ? `${data.discount_value}%` : `₹${data.discount_value}`}`
+        : null;
+
     const formattedNotes = [
       `Type: ${data.appointment_type}`,
       data.referring_doctor ? `Referring Doctor: ${data.referring_doctor}` : null,
+      discountNote,
       data.notes ? `Instructions: ${data.notes}` : null,
     ]
       .filter(Boolean)
@@ -40,6 +46,7 @@ export const createAppointmentService = {
       test_ids: data.selectedTestIds,
       visit_date: dateTimeStr,
       notes: formattedNotes,
+      total_amount: data.total_amount,
     });
   },
 
@@ -58,9 +65,15 @@ export const createAppointmentService = {
       ? `${data.appointment_date}T09:00:00`
       : new Date().toISOString();
 
+    const discountNote =
+      data.discount_value && data.discount_value > 0
+        ? `Discount: ${data.discount_type === 'percent' ? `${data.discount_value}%` : `₹${data.discount_value}`}`
+        : null;
+
     const formattedNotes = [
       `Type: ${data.appointment_type}`,
       data.referring_doctor ? `Referring Doctor: ${data.referring_doctor}` : null,
+      discountNote,
       data.notes ? `Instructions: ${data.notes}` : null,
     ]
       .filter(Boolean)
@@ -71,6 +84,7 @@ export const createAppointmentService = {
       test_ids: data.selectedTestIds,
       visit_date: dateTimeStr,
       notes: formattedNotes,
+      total_amount: data.total_amount,
     });
   },
 };
