@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar } from 'lucide-react';
+import { CalendarIcon } from '../../../../components/CalendarIcon/CalendarIcon';
 import { Visit } from '../../../../types/common.types';
 import styles from './VisitHistory.module.css';
 
@@ -33,7 +33,7 @@ export const VisitHistory: React.FC<VisitHistoryProps> = ({ visits }) => {
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
-                  <Calendar size={13} color="var(--text-muted)" />
+                  <CalendarIcon size={14} />
                   <span className={styles.visitDate}>
                     {new Date(visit.visit_date || visit.created_at).toLocaleString()}
                   </span>

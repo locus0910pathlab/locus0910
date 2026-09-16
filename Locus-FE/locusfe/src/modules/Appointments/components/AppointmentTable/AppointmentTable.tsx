@@ -136,7 +136,7 @@ export const AppointmentTable: React.FC<AppointmentTableProps> = ({
                       <div className={styles.subMeta}>
                         {patient?.phone ? (
                           <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
-                            <Phone size={11} /> {patient.phone}
+                            <Phone size={11} color="var(--accent-emerald)" /> {patient.phone}
                           </span>
                         ) : (
                           `ID: #${apt.patient_id}`

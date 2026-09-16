@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Eye, Trash2, Calendar, Phone, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Eye, Trash2, Phone, ChevronLeft, ChevronRight } from 'lucide-react';
+import { CalendarIcon } from '../../../../components/CalendarIcon/CalendarIcon';
 import { Patient } from '../../../../types/common.types';
 import styles from './PatientTable.module.css';
 
@@ -81,7 +82,7 @@ export const PatientTable: React.FC<PatientTableProps> = ({
                 {/* 3. Mobile Number (Centered, Desktop only) */}
                 <td className={`${styles.centerTd} ${styles.desktopOnly}`}>
                   <div className={styles.phoneCell}>
-                    <Phone size={14} color="var(--text-muted)" />
+                    <Phone size={14} color="var(--accent-emerald)" />
                     <span>{patient.phone || '—'}</span>
                   </div>
                 </td>
@@ -89,7 +90,7 @@ export const PatientTable: React.FC<PatientTableProps> = ({
                 {/* 4. Registration Date (Centered, Desktop only) */}
                 <td className={`${styles.centerTd} ${styles.desktopOnly}`}>
                   <div className={styles.regDateCell}>
-                    <Calendar size={13} color="var(--text-muted)" />
+                    <CalendarIcon size={15} />
                     <span>{formattedDate}</span>
                   </div>
                 </td>

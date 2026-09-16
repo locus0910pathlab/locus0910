@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Eye, ArrowUpRight, Calendar, Clock } from 'lucide-react';
+import { CalendarIcon } from '../../../../components/CalendarIcon/CalendarIcon';
 import { Visit } from '../../../../types/common.types';
 import { AppointmentDetailModal } from '../../../Appointments/components/AppointmentDetailModal/AppointmentDetailModal';
 import styles from './RecentAppointments.module.css';
@@ -121,7 +122,7 @@ export const RecentAppointments: React.FC<RecentAppointmentsProps> = ({ appointm
                 {/* 2. Appointment Date & Time */}
                 <div className={styles.dateSection}>
                   <div className={styles.date}>
-                    <Calendar size={13} color="var(--primary-600)" />
+                    <CalendarIcon size={14} />
                     <span>{formattedDate}</span>
                   </div>
                   <div className={styles.time}>
