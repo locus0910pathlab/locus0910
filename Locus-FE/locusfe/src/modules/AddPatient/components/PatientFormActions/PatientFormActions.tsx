@@ -17,7 +17,7 @@ export const PatientFormActions: React.FC<PatientFormActionsProps> = ({
     <div className={styles.actions}>
       <Button
         type="button"
-        variant="secondary"
+        variant="cancel"
         onClick={onCancel}
         disabled={isLoading}
       >

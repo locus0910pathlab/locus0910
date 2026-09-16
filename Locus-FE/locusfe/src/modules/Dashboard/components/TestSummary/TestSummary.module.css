@@ -7,6 +7,8 @@
   height: 531px;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .header {
@@ -217,4 +219,21 @@
 
 .clearFilterBtn:hover {
   color: var(--primary-700);
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 20px 16px;
+    height: auto;
+    min-height: 380px;
+    max-height: 520px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 16px 14px;
+  }
 }

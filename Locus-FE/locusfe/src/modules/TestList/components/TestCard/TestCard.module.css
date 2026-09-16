@@ -67,6 +67,12 @@
   border-top: 1px solid var(--border-subtle);
 }
 
+.priceMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
 .price {
   font-size: 18px;
   font-weight: 800;
@@ -79,4 +85,48 @@
   gap: 6px;
   font-size: 12px;
   color: var(--text-muted);
+}
+
+.cardActions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.viewBtn {
+  background-color: var(--primary-50);
+  border: 1px solid var(--primary-200);
+  color: var(--primary-700);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.viewBtn:hover {
+  background-color: var(--primary-100);
+  border-color: var(--primary-300);
+  color: var(--primary-800);
+}
+
+.deleteBtn {
+  background-color: var(--accent-rose-light);
+  border: 1px solid rgba(244, 63, 94, 0.35);
+  color: var(--accent-rose);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.deleteBtn:hover {
+  background-color: var(--accent-rose);
+  border-color: var(--accent-rose);
+  color: #ffffff;
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Calendar } from 'lucide-react';
+import { X, Calendar, Pencil } from 'lucide-react';
 import { Visit } from '../../../../types/common.types';
 import { Button } from '../../../../components/Button/Button';
 import styles from './AppointmentDetailModal.module.css';
@@ -7,11 +7,13 @@ import styles from './AppointmentDetailModal.module.css';
 export interface AppointmentDetailModalProps {
   visit: Visit | null;
   onClose: () => void;
+  onEdit?: (visit: Visit) => void;
 }
 
 export const AppointmentDetailModal: React.FC<AppointmentDetailModalProps> = ({
   visit,
   onClose,
+  onEdit,
 }) => {
   if (!visit) return null;
 
@@ -143,9 +145,19 @@ export const AppointmentDetailModal: React.FC<AppointmentDetailModalProps> = ({
         </div>
 
         <div className={styles.footer}>
-          <Button variant="secondary" size="sm" onClick={onClose}>
-            Close
+          <Button variant="cancel" size="sm" onClick={onClose}>
+            Cancel
           </Button>
+          {onEdit && visit.status === 'SCHEDULED' && (
+            <Button
+              variant="primary"
+              size="sm"
+              leftIcon={<Pencil size={14} />}
+              onClick={() => onEdit(visit)}
+            >
+              Edit Appointment
+            </Button>
+          )}
         </div>
       </div>
     </div>

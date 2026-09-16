@@ -51,6 +51,20 @@
   transform: translateY(-1px);
 }
 
+.cancel {
+  background-color: var(--accent-rose-light);
+  border: 1px solid rgba(225, 29, 72, 0.35);
+  color: var(--accent-rose);
+}
+
+.cancel:hover:not(:disabled) {
+  background-color: var(--accent-rose);
+  border-color: var(--accent-rose);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(225, 29, 72, 0.25);
+}
+
 .ghost {
   background-color: transparent;
   color: var(--text-secondary);

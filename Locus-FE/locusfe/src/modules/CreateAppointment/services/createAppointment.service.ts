@@ -42,6 +42,37 @@ export const createAppointmentService = {
       notes: formattedNotes,
     });
   },
+
+  async getVisitById(id: number): Promise<Visit> {
+    return api.get<Visit>(`/visits/${id}`);
+  },
+
+  async updateAppointment(visitId: number, data: AppointmentFormData): Promise<Visit> {
+    if (!data.patient_id) {
+      throw new Error('Please select a valid patient.');
+    }
+
+    const dateTimeStr = data.appointment_date && data.appointment_time
+      ? `${data.appointment_date}T${data.appointment_time}:00`
+      : data.appointment_date
+      ? `${data.appointment_date}T09:00:00`
+      : new Date().toISOString();
+
+    const formattedNotes = [
+      `Type: ${data.appointment_type}`,
+      data.referring_doctor ? `Referring Doctor: ${data.referring_doctor}` : null,
+      data.notes ? `Instructions: ${data.notes}` : null,
+    ]
+      .filter(Boolean)
+      .join(' | ');
+
+    return api.put<Visit>(`/visits/${visitId}`, {
+      patient_id: data.patient_id,
+      test_ids: data.selectedTestIds,
+      visit_date: dateTimeStr,
+      notes: formattedNotes,
+    });
+  },
 };
 
 export default createAppointmentService;

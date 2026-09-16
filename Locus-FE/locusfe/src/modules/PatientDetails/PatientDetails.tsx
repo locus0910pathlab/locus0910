@@ -208,7 +208,7 @@ export const PatientDetails: React.FC = () => {
 
             <div className={styles.modalActions}>
               <Button
-                variant="secondary"
+                variant="cancel"
                 onClick={() => setActiveTestEdit(null)}
                 disabled={isUpdatingResult}
               >
@@ -262,7 +262,7 @@ export const PatientDetails: React.FC = () => {
 
           <div className={styles.modalActions}>
             <Button
-              variant="secondary"
+              variant="cancel"
               onClick={() => setIsOrderModalOpen(false)}
               disabled={isOrdering}
             >

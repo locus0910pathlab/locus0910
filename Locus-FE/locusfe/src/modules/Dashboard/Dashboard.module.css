@@ -108,7 +108,8 @@
   }
 
   .actionButtons > * {
-    flex: 1 1 160px;
+    flex: 1 1 auto;
+    height: 38px;
   }
 }
 
@@ -124,9 +125,13 @@
 
   .actionButtons {
     flex-direction: column;
+    gap: 10px;
+    width: 100%;
   }
 
   .actionButtons > * {
     width: 100%;
+    flex: none;
+    height: 38px;
   }
 }

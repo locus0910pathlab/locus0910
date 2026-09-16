@@ -40,9 +40,60 @@
   box-shadow: 0 0 0 3px var(--primary-100);
 }
 
+.textarea:disabled {
+  background-color: var(--bg-subtle);
+  color: var(--text-primary);
+  -webkit-text-fill-color: var(--text-primary);
+  border-color: var(--border-subtle);
+  cursor: default;
+  resize: none;
+  opacity: 0.92;
+}
+
+.form input:disabled {
+  background-color: var(--bg-subtle);
+  color: var(--text-primary);
+  -webkit-text-fill-color: var(--text-primary);
+  border-color: var(--border-subtle);
+  cursor: default;
+  opacity: 0.92;
+}
+
 .actions {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   gap: 12px;
   margin-top: 8px;
+}
+
+.cancelBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(225, 29, 72, 0.35);
+  background-color: var(--accent-rose-light);
+  color: var(--accent-rose);
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.cancelBtn:hover:not(:disabled) {
+  background-color: var(--accent-rose);
+  border-color: var(--accent-rose);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(225, 29, 72, 0.25);
+}
+
+.cancelBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }

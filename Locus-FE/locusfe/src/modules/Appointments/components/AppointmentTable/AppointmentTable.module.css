@@ -274,8 +274,8 @@
   max-width: 360px;
 }
 
-/* Responsive Behavior */
-@media (max-width: 768px) {
+/* Responsive Behavior for Other than Desktop Devices */
+@media (max-width: 1280px) {
   .desktopOnly {
     display: none !important;
   }

@@ -4,6 +4,8 @@
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .table {
@@ -84,12 +86,34 @@
   gap: 8px;
 }
 
+.viewBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--primary-200);
+  background-color: var(--primary-50);
+  color: var(--primary-700);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.viewBtn:hover {
+  background-color: var(--primary-100);
+  border-color: var(--primary-300);
+  color: var(--primary-800);
+}
+
 .deleteBtn {
   background-color: var(--accent-rose-light);
   border: 1px solid rgba(244, 63, 94, 0.35);
   color: var(--accent-rose);
   cursor: pointer;
-  padding: 6px;
+  padding: 6px 8px;
   border-radius: var(--radius-sm);
   display: inline-flex;
   align-items: center;
@@ -109,4 +133,29 @@
   padding: 48px 20px;
   text-align: center;
   color: var(--text-muted);
+}
+
+@media (max-width: 768px) {
+  .desktopOnly {
+    display: none !important;
+  }
+
+  .table td,
+  .table th {
+    padding: 12px 14px;
+  }
+
+  .actions {
+    gap: 6px;
+    justify-content: flex-end;
+  }
+
+  .viewBtn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .deleteBtn {
+    padding: 6px 8px;
+  }
 }

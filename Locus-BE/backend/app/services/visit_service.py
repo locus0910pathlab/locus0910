@@ -70,8 +70,20 @@ class VisitService:
     @staticmethod
     def update(db: Session, db_obj: Visit, obj_in: VisitUpdate) -> Visit:
         update_data = obj_in.model_dump(exclude_unset=True)
+        test_ids = update_data.pop("test_ids", None)
+
         for field, value in update_data.items():
             setattr(db_obj, field, value)
+
+        if test_ids is not None:
+            # Delete old visit tests and replace with updated tests
+            db.query(VisitTest).filter(VisitTest.visit_id == db_obj.id).delete()
+            tests = db.query(Test).filter(Test.id.in_(test_ids)).all() if test_ids else []
+            db_obj.total_amount = sum(t.price for t in tests)
+            for test in tests:
+                visit_test = VisitTest(visit_id=db_obj.id, test_id=test.id)
+                db.add(visit_test)
+
         db.commit()
         db.refresh(db_obj)
         return VisitService.get_by_id(db, db_obj.id)  # type: ignore

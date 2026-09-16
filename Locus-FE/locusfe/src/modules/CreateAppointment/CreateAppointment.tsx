@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   CalendarCheck,
   Search,
   User,
   CheckCircle2,
   Clock,
-  PlusCircle,
   X,
   Stethoscope,
   ChevronRight,
-  ChevronLeft,
 } from 'lucide-react';
 import { Input } from '../../components/Input/Input';
 import { Button } from '../../components/Button/Button';
@@ -21,6 +19,9 @@ import styles from './CreateAppointment.module.css';
 
 export const CreateAppointment: React.FC = () => {
   const navigate = useNavigate();
+  const { id } = useParams<{ id?: string }>();
+  const visitId = id ? parseInt(id, 10) : null;
+  const isEditMode = Boolean(visitId);
 
   // Form State
   const [formData, setFormData] = useState<AppointmentFormData>({
@@ -60,6 +61,71 @@ export const CreateAppointment: React.FC = () => {
       .catch(() => setAvailableTests([]))
       .finally(() => setIsLoadingTests(false));
   }, []);
+
+  // Load appointment details if editing an existing visit
+  useEffect(() => {
+    if (visitId) {
+      createAppointmentService
+        .getVisitById(visitId)
+        .then((visit) => {
+          if (!visit) return;
+          if (visit.status !== 'SCHEDULED') {
+            setError(
+              `Only appointments with "SCHEDULED" status can be edited. This appointment is currently ${visit.status}.`
+            );
+            return;
+          }
+          if (visit.patient) {
+            setSelectedPatient(visit.patient);
+            setPatientSearch(`${visit.patient.first_name} ${visit.patient.last_name}`);
+          }
+          const datePart = visit.visit_date && visit.visit_date.includes('T')
+            ? visit.visit_date.split('T')[0]
+            : (visit.visit_date || new Date().toISOString().split('T')[0]);
+          const timePart = visit.visit_date && visit.visit_date.includes('T')
+            ? visit.visit_date.split('T')[1].substring(0, 5)
+            : '10:00';
+
+          let apptType: 'Lab Visit' | 'Home Sample Collection' | 'Priority Diagnostic' = 'Lab Visit';
+          let refDoc = '';
+          let instructions = '';
+
+          if (visit.notes) {
+            const typeMatch = visit.notes.match(/Type:\s*([^|]+)/i);
+            const doctorMatch = visit.notes.match(/Referring Doctor:\s*([^|]+)/i);
+            const instrMatch = visit.notes.match(/Instructions:\s*(.+)/i);
+
+            if (typeMatch) {
+              const matched = typeMatch[1].trim();
+              if (
+                matched === 'Lab Visit' ||
+                matched === 'Home Sample Collection' ||
+                matched === 'Priority Diagnostic'
+              ) {
+                apptType = matched;
+              }
+            }
+            if (doctorMatch) refDoc = doctorMatch[1].trim();
+            if (instrMatch) instructions = instrMatch[1].trim();
+            else if (!typeMatch && !doctorMatch) instructions = visit.notes;
+          }
+
+          setFormData({
+            patient_id: visit.patient_id,
+            appointment_date: datePart,
+            appointment_time: timePart,
+            appointment_type: apptType,
+            selectedTestIds: (visit.tests_ordered || []).map((t) => t.test_id),
+            referring_doctor: refDoc,
+            notes: instructions,
+          });
+        })
+        .catch((err) => {
+          console.error('Failed to load visit for editing:', err);
+          setError('Could not load appointment details for editing.');
+        });
+    }
+  }, [visitId]);
 
   // Debounce test search input for responsive control
   useEffect(() => {
@@ -134,6 +200,7 @@ export const CreateAppointment: React.FC = () => {
   };
 
   const handleClearPatient = () => {
+    if (isEditMode) return;
     setSelectedPatient(null);
     setFormData((prev) => ({ ...prev, patient_id: null }));
   };
@@ -170,10 +237,18 @@ export const CreateAppointment: React.FC = () => {
     setError(null);
 
     try {
-      const visit = await createAppointmentService.submitAppointment(formData);
-      setCreatedVisit(visit);
+      if (isEditMode && visitId) {
+        const visit = await createAppointmentService.updateAppointment(visitId, formData);
+        setCreatedVisit(visit);
+      } else {
+        const visit = await createAppointmentService.submitAppointment(formData);
+        setCreatedVisit(visit);
+      }
     } catch (err: any) {
-      setError(err.message || 'Failed to create appointment.');
+      setError(
+        err.message ||
+          (isEditMode ? 'Failed to update appointment.' : 'Failed to create appointment.')
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -188,45 +263,21 @@ export const CreateAppointment: React.FC = () => {
               <CheckCircle2 size={36} color="var(--accent-emerald)" />
               <div>
                 <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-primary)' }}>
-                  Appointment Successfully Scheduled!
+                  {isEditMode ? 'Appointment Successfully Updated!' : 'Appointment Successfully Scheduled!'}
                 </h3>
                 <p style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
-                  Order #{createdVisit.id} created for {selectedPatient?.first_name}{' '}
-                  {selectedPatient?.last_name}.
+                  Appointment #{createdVisit.id} {isEditMode ? 'updated' : 'created'} for{' '}
+                  {selectedPatient?.first_name} {selectedPatient?.last_name}.
                 </p>
               </div>
             </div>
 
-            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-              <Button
-                variant="secondary"
-                onClick={() => {
-                  setCreatedVisit(null);
-                  setSelectedPatient(null);
-                  setFormData({
-                    patient_id: null,
-                    appointment_date: new Date().toISOString().split('T')[0],
-                    appointment_time: '10:00',
-                    appointment_type: 'Lab Visit',
-                    selectedTestIds: [],
-                    referring_doctor: '',
-                    notes: '',
-                  });
-                }}
-              >
-                Book Another
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => navigate('/appointments')}
-              >
-                View Appointments
-              </Button>
+            <div>
               <Button
                 variant="primary"
-                onClick={() => navigate(`/patients/${selectedPatient?.id}`)}
+                onClick={() => navigate('/appointments')}
               >
-                View Patient Record
+                Go to All Appointments
               </Button>
             </div>
           </div>
@@ -235,31 +286,14 @@ export const CreateAppointment: React.FC = () => {
         <form onSubmit={handleSubmit} className={styles.card}>
           <div className={styles.header}>
             <div>
-              <h2 className={styles.title}>Create Laboratory Appointment</h2>
+              <h2 className={styles.title}>
+                {isEditMode ? 'Edit Laboratory Appointment' : 'Create Laboratory Appointment'}
+              </h2>
               <p className={styles.subtitle}>
-                Schedule diagnostic sample collection visits and assign laboratory panels.
+                {isEditMode
+                  ? 'Update diagnostic sample collection visit details and assigned laboratory panels.'
+                  : 'Schedule diagnostic sample collection visits and assign laboratory panels.'}
               </p>
-            </div>
-
-            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                leftIcon={<ChevronLeft size={15} />}
-                onClick={() => navigate('/appointments')}
-              >
-                Back to Appointments
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                leftIcon={<PlusCircle size={15} />}
-                onClick={() => navigate('/patients/new')}
-              >
-                New Patient Intake
-              </Button>
             </div>
           </div>
 
@@ -282,7 +316,7 @@ export const CreateAppointment: React.FC = () => {
           <div className={styles.section}>
             <h3 className={styles.sectionTitle}>
               <User size={18} color="var(--primary-600)" />
-              <span>1. Select Patient</span>
+              <span>{isEditMode ? '1. Patient Details' : '1. Select Patient'}</span>
             </h3>
 
             {selectedPatient ? (
@@ -302,24 +336,26 @@ export const CreateAppointment: React.FC = () => {
                   </div>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={handleClearPatient}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    color: 'var(--text-muted)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                    fontSize: '12px',
-                    fontWeight: 600,
-                  }}
-                >
-                  <X size={16} />
-                  <span>Change</span>
-                </button>
+                {!isEditMode && (
+                  <button
+                    type="button"
+                    onClick={handleClearPatient}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      color: 'var(--text-muted)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                    }}
+                  >
+                    <X size={16} />
+                    <span>Change</span>
+                  </button>
+                )}
               </div>
             ) : (
               <div className={styles.patientSearchWrapper}>
@@ -558,7 +594,7 @@ export const CreateAppointment: React.FC = () => {
           <div className={styles.actions}>
             <Button
               type="button"
-              variant="secondary"
+              variant="cancel"
               onClick={() => navigate('/appointments')}
               disabled={isSubmitting}
             >
@@ -570,7 +606,7 @@ export const CreateAppointment: React.FC = () => {
               isLoading={isSubmitting}
               leftIcon={<CalendarCheck size={17} />}
             >
-              Confirm & Book Appointment
+              {isEditMode ? 'Confirm & Save Changes' : 'Confirm & Book Appointment'}
             </Button>
           </div>
         </form>

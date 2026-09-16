@@ -44,6 +44,8 @@ class VisitUpdate(BaseModel):
     status: Optional[VisitStatus] = None
     notes: Optional[str] = None
     visit_date: Optional[datetime] = None
+    patient_id: Optional[int] = None
+    test_ids: Optional[List[int]] = None
 
 
 class VisitResponse(BaseModel):

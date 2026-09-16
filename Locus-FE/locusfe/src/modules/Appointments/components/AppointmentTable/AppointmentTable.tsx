@@ -90,7 +90,7 @@ export const AppointmentTable: React.FC<AppointmentTableProps> = ({
             <th className={`${styles.apptCol} ${styles.desktopOnly}`}>Appt #</th>
             <th className={styles.patientCol}>Patient</th>
             <th className={`${styles.dateCol} ${styles.centerTh} ${styles.desktopOnly}`}>Date & Time</th>
-            <th className={`${styles.statusCol} ${styles.centerTh}`}>Status</th>
+            <th className={`${styles.statusCol} ${styles.centerTh} ${styles.desktopOnly}`}>Status</th>
             <th className={`${styles.amountCol} ${styles.centerTh} ${styles.desktopOnly}`}>Amount</th>
             <th className={`${styles.actionsCol} ${styles.centerTh}`}>Actions</th>
           </tr>
@@ -154,8 +154,8 @@ export const AppointmentTable: React.FC<AppointmentTableProps> = ({
                   </div>
                 </td>
 
-                {/* 4. Status (Centered) */}
-                <td className={`${styles.statusCol} ${styles.centerTd}`}>
+                {/* 4. Status (Centered, Desktop only) */}
+                <td className={`${styles.statusCol} ${styles.centerTd} ${styles.desktopOnly}`}>
                   {renderStatusBadge(apt.status)}
                 </td>
 
@@ -175,7 +175,7 @@ export const AppointmentTable: React.FC<AppointmentTableProps> = ({
                       <Eye size={14} />
                       <span>View</span>
                     </button>
-                    {onDelete && (
+                    {onDelete && apt.status === 'SCHEDULED' && (
                       <button
                         className={styles.deleteBtn}
                         title="Delete / Cancel Appointment"

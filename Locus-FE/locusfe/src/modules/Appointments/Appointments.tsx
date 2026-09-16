@@ -167,6 +167,10 @@ export const Appointments: React.FC = () => {
         <AppointmentDetailModal
           visit={selectedVisit}
           onClose={() => setSelectedVisit(null)}
+          onEdit={(visit) => {
+            setSelectedVisit(null);
+            navigate(`/appointments/edit/${visit.id}`);
+          }}
         />
       )}
     </div>

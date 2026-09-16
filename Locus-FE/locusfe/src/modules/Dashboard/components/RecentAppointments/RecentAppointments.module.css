@@ -7,6 +7,8 @@
   height: 531px;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .header {
@@ -256,12 +258,62 @@
   gap: 8px;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
+  .container {
+    padding: 20px 16px;
+    height: auto;
+    min-height: 380px;
+    max-height: 520px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .item {
+    padding: 10px 14px;
+    width: 100%;
+    box-sizing: border-box;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .patientMeta {
+    min-width: 0;
+    flex: 1;
+    gap: 10px;
+  }
+
+  .name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 160px;
+  }
+
+  /* On mobile view, hide date, status badge, and price - only show name, ID, and view button */
   .dateSection {
     display: none;
   }
 
-  .item {
-    padding: 10px 12px;
+  .statusAndAmount {
+    display: none;
+  }
+
+  .rightMeta {
+    gap: 0;
+    flex-shrink: 0;
+  }
+
+  .viewBtn {
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 16px 14px;
+  }
+
+  .name {
+    max-width: 130px;
   }
 }

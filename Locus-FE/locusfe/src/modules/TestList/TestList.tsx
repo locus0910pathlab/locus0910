@@ -16,6 +16,7 @@ export const TestList: React.FC = () => {
   const [categoryFilter, setCategoryFilter] = useState('');
   const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingTest, setEditingTest] = useState<LabTest | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchTests = useCallback(async () => {
@@ -34,9 +35,23 @@ export const TestList: React.FC = () => {
     fetchTests();
   }, [fetchTests]);
 
-  const handleCreateTest = async (data: TestFormData) => {
-    await testListService.createTest(data);
+  const handleSaveTest = async (data: TestFormData) => {
+    if (editingTest) {
+      await testListService.updateTest(editingTest.id, data);
+    } else {
+      await testListService.createTest(data);
+    }
     await fetchTests();
+  };
+
+  const handleViewTest = (test: LabTest) => {
+    setEditingTest(test);
+    setIsModalOpen(true);
+  };
+
+  const handleOpenCreateModal = () => {
+    setEditingTest(null);
+    setIsModalOpen(true);
   };
 
   const handleDelete = async (id: number) => {
@@ -101,7 +116,7 @@ export const TestList: React.FC = () => {
           </div>
         </div>
 
-        <Button leftIcon={<PlusCircle size={17} />} onClick={() => setIsModalOpen(true)}>
+        <Button leftIcon={<PlusCircle size={17} />} onClick={handleOpenCreateModal}>
           Add Test
         </Button>
       </div>
@@ -109,19 +124,23 @@ export const TestList: React.FC = () => {
       {isLoading ? (
         <div className={styles.loading}>Loading laboratory catalog...</div>
       ) : viewMode === 'table' ? (
-        <TestTable tests={filteredTests} onDelete={handleDelete} />
+        <TestTable tests={filteredTests} onView={handleViewTest} onDelete={handleDelete} />
       ) : (
         <div className={styles.grid}>
           {filteredTests.map((test) => (
-            <TestCard key={test.id} test={test} />
+            <TestCard key={test.id} test={test} onView={handleViewTest} onDelete={handleDelete} />
           ))}
         </div>
       )}
 
       <AddTestModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSubmit={handleCreateTest}
+        onClose={() => {
+          setIsModalOpen(false);
+          setEditingTest(null);
+        }}
+        onSubmit={handleSaveTest}
+        testToEdit={editingTest}
       />
     </div>
   );

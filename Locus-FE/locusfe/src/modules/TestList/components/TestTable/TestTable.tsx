@@ -1,14 +1,18 @@
 import React from 'react';
-import { Trash2, Clock } from 'lucide-react';
+import { Trash2, Clock, Eye } from 'lucide-react';
 import { LabTest } from '../../../../types/common.types';
 import styles from './TestTable.module.css';
 
 export interface TestTableProps {
   tests: LabTest[];
+  onEdit?: (test: LabTest) => void;
+  onView?: (test: LabTest) => void;
   onDelete?: (id: number) => void;
 }
 
-export const TestTable: React.FC<TestTableProps> = ({ tests, onDelete }) => {
+export const TestTable: React.FC<TestTableProps> = ({ tests, onEdit, onView, onDelete }) => {
+  const handleView = onView || onEdit;
+
   if (tests.length === 0) {
     return (
       <div className={styles.tableWrapper}>
@@ -23,11 +27,11 @@ export const TestTable: React.FC<TestTableProps> = ({ tests, onDelete }) => {
         <thead>
           <tr>
             <th>Test Code</th>
-            <th>Name & Description</th>
-            <th>Category</th>
-            <th>Turnaround</th>
+            <th className={styles.desktopOnly}>Name & Description</th>
+            <th className={styles.desktopOnly}>Category</th>
+            <th className={styles.desktopOnly}>Turnaround</th>
             <th>Price</th>
-            <th>Status</th>
+            <th className={styles.desktopOnly}>Status</th>
             <th style={{ textAlign: 'right' }}>Actions</th>
           </tr>
         </thead>
@@ -37,7 +41,7 @@ export const TestTable: React.FC<TestTableProps> = ({ tests, onDelete }) => {
               <td>
                 <span className={styles.codeBadge}>{test.code}</span>
               </td>
-              <td>
+              <td className={styles.desktopOnly}>
                 <div style={{ fontWeight: 600 }}>{test.name}</div>
                 {test.description && (
                   <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
@@ -45,10 +49,10 @@ export const TestTable: React.FC<TestTableProps> = ({ tests, onDelete }) => {
                   </div>
                 )}
               </td>
-              <td>
+              <td className={styles.desktopOnly}>
                 <span className={styles.categoryTag}>{test.category || 'General'}</span>
               </td>
-              <td>
+              <td className={styles.desktopOnly}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: 'var(--text-secondary)' }}>
                   <Clock size={14} color="var(--text-muted)" />
                   <span>{test.turnaround_hours || 24}h</span>
@@ -57,7 +61,7 @@ export const TestTable: React.FC<TestTableProps> = ({ tests, onDelete }) => {
               <td>
                 <span className={styles.price}>₹{Number(test.price).toFixed(2)}</span>
               </td>
-              <td>
+              <td className={styles.desktopOnly}>
                 <span className={styles.activeStatus}>
                   <span
                     className={
@@ -69,6 +73,16 @@ export const TestTable: React.FC<TestTableProps> = ({ tests, onDelete }) => {
               </td>
               <td>
                 <div className={styles.actions}>
+                  {handleView && (
+                    <button
+                      className={styles.viewBtn}
+                      title="View Test Details"
+                      onClick={() => handleView(test)}
+                    >
+                      <Eye size={14} />
+                      <span className={styles.actionText}>View</span>
+                    </button>
+                  )}
                   {onDelete && (
                     <button
                       className={styles.deleteBtn}
@@ -79,7 +93,7 @@ export const TestTable: React.FC<TestTableProps> = ({ tests, onDelete }) => {
                         }
                       }}
                     >
-                      <Trash2 size={16} />
+                      <Trash2 size={15} />
                     </button>
                   )}
                 </div>

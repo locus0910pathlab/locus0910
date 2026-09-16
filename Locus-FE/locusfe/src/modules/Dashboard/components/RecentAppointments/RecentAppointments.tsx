@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Eye, ArrowUpRight, Calendar, Clock } from 'lucide-react';
 import { Visit } from '../../../../types/common.types';
 import { AppointmentDetailModal } from '../../../Appointments/components/AppointmentDetailModal/AppointmentDetailModal';
@@ -10,6 +10,7 @@ export interface RecentAppointmentsProps {
 }
 
 export const RecentAppointments: React.FC<RecentAppointmentsProps> = ({ appointments }) => {
+  const navigate = useNavigate();
   const [selectedVisit, setSelectedVisit] = useState<Visit | null>(null);
   const renderStatusBadge = (status: string) => {
     switch (status) {
@@ -100,11 +101,9 @@ export const RecentAppointments: React.FC<RecentAppointmentsProps> = ({ appointm
               : '10:00 AM';
 
             return (
-              <Link
-                to="/appointments"
+              <div
                 key={apt.id}
                 className={styles.item}
-                title={`Appointment #${apt.id} for ${patient?.first_name || 'Patient'} - Click to view in Appointments`}
               >
                 {/* 1. Patient Avatar, 1st Name & Patient ID */}
                 <div className={styles.patientMeta}>
@@ -153,7 +152,7 @@ export const RecentAppointments: React.FC<RecentAppointmentsProps> = ({ appointm
                     <span>View</span>
                   </button>
                 </div>
-              </Link>
+              </div>
             );
           })}
         </div>
@@ -164,6 +163,10 @@ export const RecentAppointments: React.FC<RecentAppointmentsProps> = ({ appointm
         <AppointmentDetailModal
           visit={selectedVisit}
           onClose={() => setSelectedVisit(null)}
+          onEdit={(visit) => {
+            setSelectedVisit(null);
+            navigate(`/appointments/edit/${visit.id}`);
+          }}
         />
       )}
     </div>
