@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { Bell, Activity, Menu } from 'lucide-react';
+import { Bell, Activity, Menu, RefreshCw } from 'lucide-react';
+import api from '../../services/api';
 import styles from './Navbar.module.css';
 
 const routeTitles: Record<string, string> = {
@@ -48,6 +49,18 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
           <span className={styles.statusDot} />
           <span className={styles.statusText}>Supabase Connected</span>
         </div>
+
+        <button
+          className={styles.iconButton}
+          onClick={() => {
+            api.clearCache();
+            window.location.reload();
+          }}
+          aria-label="Refresh & Sync Data"
+          title="Refresh & Sync Server Data"
+        >
+          <RefreshCw size={17} />
+        </button>
 
         <button className={styles.iconButton} aria-label="System Activity" title="System Status">
           <Activity size={18} />

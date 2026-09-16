@@ -1,4 +1,5 @@
 .searchContainer {
   flex: 1;
-  max-width: 400px;
+  width: 100%;
+  min-width: 240px;
 }

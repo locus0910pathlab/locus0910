@@ -87,13 +87,12 @@ export const AppointmentTable: React.FC<AppointmentTableProps> = ({
       <table className={styles.table}>
         <thead>
           <tr>
-            <th className={styles.desktopOnly}>Appt #</th>
-            <th>Patient</th>
-            <th className={`${styles.centerTh} ${styles.desktopOnly}`}>Date & Time</th>
-            <th className={`${styles.centerTh} ${styles.desktopOnly}`}>Tests Prescribed</th>
-            <th className={`${styles.centerTh} ${styles.desktopOnly}`}>Amount</th>
-            <th className={styles.centerTh}>Status</th>
-            <th className={styles.centerTh}>Actions</th>
+            <th className={`${styles.apptCol} ${styles.desktopOnly}`}>Appt #</th>
+            <th className={styles.patientCol}>Patient</th>
+            <th className={`${styles.dateCol} ${styles.centerTh} ${styles.desktopOnly}`}>Date & Time</th>
+            <th className={`${styles.statusCol} ${styles.centerTh}`}>Status</th>
+            <th className={`${styles.amountCol} ${styles.centerTh} ${styles.desktopOnly}`}>Amount</th>
+            <th className={`${styles.actionsCol} ${styles.centerTh}`}>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -119,17 +118,15 @@ export const AppointmentTable: React.FC<AppointmentTableProps> = ({
                 })
               : '10:00 AM';
 
-            const tests = apt.tests_ordered || [];
-
             return (
               <tr key={apt.id} className={styles.row}>
                 {/* 1. Appt # (Desktop only) */}
-                <td className={styles.desktopOnly}>
+                <td className={`${styles.apptCol} ${styles.desktopOnly}`}>
                   <span className={styles.aptIdBadge}>#{apt.id}</span>
                 </td>
 
                 {/* 2. Patient */}
-                <td>
+                <td className={styles.patientCol}>
                   <div className={styles.patientCell}>
                     <div className={styles.avatar}>{initials}</div>
                     <div>
@@ -150,42 +147,25 @@ export const AppointmentTable: React.FC<AppointmentTableProps> = ({
                 </td>
 
                 {/* 3. Date & Time (Centered, Desktop only) */}
-                <td className={`${styles.centerTd} ${styles.desktopOnly}`}>
+                <td className={`${styles.dateCol} ${styles.centerTd} ${styles.desktopOnly}`}>
                   <div className={styles.dateTimeCell}>
                     <div className={styles.dateText}>{formattedDate}</div>
                     <div className={styles.timeText}>{formattedTime}</div>
                   </div>
                 </td>
 
-                {/* 4. Tests Prescribed (Centered, Desktop only) */}
-                <td className={`${styles.centerTd} ${styles.desktopOnly}`}>
-                  <div className={styles.testsList}>
-                    {tests.length > 0 ? (
-                      tests.map((t) => (
-                        <span key={t.id} className={styles.testBadge} title={t.test?.name}>
-                          {t.test?.code || `Test #${t.test_id}`}
-                        </span>
-                      ))
-                    ) : (
-                      <span style={{ color: 'var(--text-muted)', fontSize: '12px' }}>
-                        No panels
-                      </span>
-                    )}
-                  </div>
-                </td>
-
-                {/* 5. Amount (Centered, Desktop only) */}
-                <td className={`${styles.centerTd} ${styles.desktopOnly}`}>
-                  <span className={styles.amount}>₹{Number(apt.total_amount).toFixed(2)}</span>
-                </td>
-
-                {/* 6. Status (Centered) */}
-                <td className={styles.centerTd}>
+                {/* 4. Status (Centered) */}
+                <td className={`${styles.statusCol} ${styles.centerTd}`}>
                   {renderStatusBadge(apt.status)}
                 </td>
 
-                {/* 7. Actions (Centered on desktop, right-aligned on mobile) */}
-                <td className={styles.centerTd}>
+                {/* 5. Amount (Centered, Desktop only) */}
+                <td className={`${styles.amountCol} ${styles.centerTd} ${styles.desktopOnly}`}>
+                  <span className={styles.amount}>₹{Number(apt.total_amount).toFixed(2)}</span>
+                </td>
+
+                {/* 6. Actions (Centered on desktop, right-aligned on mobile) */}
+                <td className={`${styles.actionsCol} ${styles.centerTd}`}>
                   <div className={styles.actions}>
                     <button
                       className={styles.viewBtn}

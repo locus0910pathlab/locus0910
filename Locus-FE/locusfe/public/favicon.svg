@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 155" width="100%" height="100%">
+  <defs>
+    <linearGradient id="iconMicroscopeBody" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E4F1F9" />
+      <stop offset="45%" stop-color="#B8DCF2" />
+      <stop offset="100%" stop-color="#7BB5DB" />
+    </linearGradient>
+
+    <linearGradient id="iconBasePlate" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#C5DFEE" />
+      <stop offset="50%" stop-color="#E8F4FB" />
+      <stop offset="100%" stop-color="#9BC7E2" />
+    </linearGradient>
+  </defs>
+
+  <!-- Microscope Base -->
+  <path d="M 12 142 L 88 142 C 91 142 93 139 91 135 L 88 128 C 86 125 82 123 78 123 L 22 123 C 18 123 14 125 12 128 L 9 135 C 7 139 9 142 12 142 Z"
+        fill="url(#iconBasePlate)" stroke="#162644" stroke-width="2.6" stroke-linejoin="round" />
+  <line x1="14" y1="134" x2="86" y2="134" stroke="#162644" stroke-width="1.2" opacity="0.6" />
+
+  <!-- Pillar / Base post -->
+  <rect x="52" y="102" width="18" height="23" rx="2" fill="url(#iconMicroscopeBody)" stroke="#162644" stroke-width="2.4" />
+
+  <!-- Mirror / Substage Light Source -->
+  <ellipse cx="40" cy="116" rx="10" ry="4.5" transform="rotate(-20 40 116)" fill="#EAF4FC" stroke="#162644" stroke-width="2" />
+  <path d="M 40 120 L 52 114" stroke="#162644" stroke-width="2.5" />
+
+  <!-- Stage (Platform) -->
+  <rect x="22" y="93" width="46" height="5.5" rx="1.5" fill="#162644" stroke="#162644" stroke-width="1.5" />
+  <!-- Slide on stage with DNA indicator -->
+  <rect x="33" y="90.5" width="24" height="2.5" rx="0.5" fill="#FFFFFF" stroke="#4B9ECC" stroke-width="1" />
+
+  <!-- Curved C-Arm Neck -->
+  <path d="M 61 106 
+           C 80 102, 90 85, 86 64 
+           C 83 45, 68 35, 54 35 
+           C 49 35, 43 38, 38 42
+           L 44 48
+           C 47 45, 51 43, 55 43
+           C 64 43, 73 50, 75 64
+           C 77 78, 70 92, 57 96 
+           Z"
+        fill="url(#iconMicroscopeBody)" stroke="#162644" stroke-width="2.5" stroke-linejoin="round" />
+
+  <!-- Coarse Adjustment Knob with DNA helix touch -->
+  <circle cx="68" cy="85" r="8" fill="#4B9ECC" stroke="#162644" stroke-width="2.2" />
+  <circle cx="68" cy="85" r="4.5" fill="#E4F1F9" stroke="#162644" stroke-width="1.5" />
+  <circle cx="68" cy="85" r="1.5" fill="#162644" />
+
+  <!-- Revolving Nosepiece / Turret -->
+  <path d="M 33 55 L 53 43 L 45 37 L 27 49 Z" fill="#7BB5DB" stroke="#162644" stroke-width="2" />
+  <!-- Objective Lenses -->
+  <rect x="36" y="66" width="7" height="15" rx="1.5" transform="rotate(22 36 66)" fill="url(#iconMicroscopeBody)" stroke="#162644" stroke-width="2" />
+  <rect x="27" y="63" width="6" height="13" rx="1.2" transform="rotate(38 27 63)" fill="url(#iconMicroscopeBody)" stroke="#162644" stroke-width="1.8" />
+  <rect x="44" y="67" width="5.5" height="11" rx="1.2" transform="rotate(5 44 67)" fill="url(#iconMicroscopeBody)" stroke="#162644" stroke-width="1.8" />
+
+  <!-- Body Tube (angled) -->
+  <path d="M 44 47 L 62 25 L 72 33 L 54 55 Z" fill="url(#iconMicroscopeBody)" stroke="#162644" stroke-width="2.5" stroke-linejoin="round" />
+  <line x1="48" y1="45" x2="66" y2="28" stroke="#FFFFFF" stroke-width="1.5" opacity="0.8" />
+
+  <!-- Eyepiece Tube & Lens -->
+  <rect x="62" y="16" width="13" height="14" rx="1" transform="rotate(-42 62 16)" fill="#7BB5DB" stroke="#162644" stroke-width="2.2" />
+  <rect x="69" y="10" width="16" height="6.5" rx="1.5" transform="rotate(-42 69 10)" fill="#162644" stroke="#162644" stroke-width="1.5" />
+</svg>

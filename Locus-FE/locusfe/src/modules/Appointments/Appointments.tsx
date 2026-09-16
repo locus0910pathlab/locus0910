@@ -9,25 +9,18 @@ import { Input } from '../../components/Input/Input';
 import appointmentsService from './services/appointments.service';
 import { Visit } from '../../types/common.types';
 import { AppointmentSortOption, AppointmentStatusFilter } from './types/appointments.types';
+import { useDebounce } from '../../hooks/useDebounce';
 import styles from './Appointments.module.css';
 
 export const Appointments: React.FC = () => {
   const navigate = useNavigate();
   const [appointments, setAppointments] = useState<Visit[]>([]);
   const [search, setSearch] = useState('');
-  const [debouncedSearch, setDebouncedSearch] = useState('');
+  const debouncedSearch = useDebounce(search, 400);
   const [statusFilter, setStatusFilter] = useState<AppointmentStatusFilter>('ALL');
   const [sortBy, setSortBy] = useState<AppointmentSortOption>('date_desc');
   const [isLoading, setIsLoading] = useState(true);
   const [selectedVisit, setSelectedVisit] = useState<Visit | null>(null);
-
-  // Debouncer for search input
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearch(search);
-    }, 250);
-    return () => clearTimeout(timer);
-  }, [search]);
 
   // Fetch appointments from API
   const fetchAppointments = useCallback(async () => {
@@ -121,12 +114,20 @@ export const Appointments: React.FC = () => {
     }
   });
 
+  const hasActiveFilters = Boolean(search.trim()) || statusFilter !== 'ALL' || sortBy !== 'date_desc';
+
+  const handleClearFilters = () => {
+    setSearch('');
+    setStatusFilter('ALL');
+    setSortBy('date_desc');
+  };
+
   return (
     <div className={styles.container}>
       {/* Top Header Bar matching Patients page pattern */}
       <div className={styles.topBar}>
         <div className={styles.controls}>
-          <div style={{ flex: '1 1 240px', minWidth: '220px' }}>
+          <div className={styles.searchWrapper}>
             <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -139,6 +140,8 @@ export const Appointments: React.FC = () => {
             onStatusChange={setStatusFilter}
             sortBy={sortBy}
             onSortChange={setSortBy}
+            onClearFilters={handleClearFilters}
+            hasActiveFilters={hasActiveFilters}
           />
         </div>
 

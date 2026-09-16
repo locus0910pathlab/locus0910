@@ -7,6 +7,8 @@ export interface AppointmentFiltersProps {
   onStatusChange: (val: AppointmentStatusFilter) => void;
   sortBy: AppointmentSortOption;
   onSortChange: (val: AppointmentSortOption) => void;
+  onClearFilters: () => void;
+  hasActiveFilters?: boolean;
 }
 
 export const AppointmentFilters: React.FC<AppointmentFiltersProps> = ({
@@ -14,13 +16,15 @@ export const AppointmentFilters: React.FC<AppointmentFiltersProps> = ({
   onStatusChange,
   sortBy,
   onSortChange,
+  onClearFilters,
+  hasActiveFilters = false,
 }) => {
   return (
     <div className={styles.filters}>
       {/* Sort By Dropdown */}
       <div className={styles.selectGroup}>
         <select
-          className={styles.select}
+          className={`${styles.select} ${styles.sortSelect}`}
           value={sortBy}
           onChange={(e) => onSortChange(e.target.value as AppointmentSortOption)}
           aria-label="Sort appointments"
@@ -38,7 +42,7 @@ export const AppointmentFilters: React.FC<AppointmentFiltersProps> = ({
       {/* Status Filter Dropdown */}
       <div className={styles.selectGroup}>
         <select
-          className={styles.select}
+          className={`${styles.select} ${styles.statusSelect}`}
           value={status}
           onChange={(e) => onStatusChange(e.target.value as AppointmentStatusFilter)}
           aria-label="Filter by appointment status"
@@ -51,6 +55,17 @@ export const AppointmentFilters: React.FC<AppointmentFiltersProps> = ({
           <option value="CANCELLED">Cancelled</option>
         </select>
       </div>
+
+      {/* Clear Filter Button */}
+      <button
+        type="button"
+        className={`${styles.clearBtn} ${hasActiveFilters ? styles.clearBtnActive : ''}`}
+        onClick={onClearFilters}
+        disabled={!hasActiveFilters}
+        title="Reset search and filters to default"
+      >
+        Clear Filter
+      </button>
     </div>
   );
 };

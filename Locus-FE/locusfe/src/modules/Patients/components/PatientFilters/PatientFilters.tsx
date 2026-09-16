@@ -3,17 +3,21 @@ import { PatientSortOption } from '../../types/patients.types';
 import styles from './PatientFilters.module.css';
 
 export interface PatientFiltersProps {
-  gender: string;
-  onGenderChange: (val: string) => void;
   sortBy: PatientSortOption;
   onSortChange: (val: PatientSortOption) => void;
+  pageSize: string;
+  onPageSizeChange: (val: string) => void;
+  onClearFilters: () => void;
+  hasActiveFilters?: boolean;
 }
 
 export const PatientFilters: React.FC<PatientFiltersProps> = ({
-  gender,
-  onGenderChange,
   sortBy,
   onSortChange,
+  pageSize,
+  onPageSizeChange,
+  onClearFilters,
+  hasActiveFilters = false,
 }) => {
   return (
     <div className={styles.filters}>
@@ -34,22 +38,32 @@ export const PatientFilters: React.FC<PatientFiltersProps> = ({
         </select>
       </div>
 
-      {/* Gender Filter Dropdown */}
+      {/* Rows Per Page Dropdown */}
       <div className={styles.selectGroup}>
         <select
           className={styles.select}
-          value={gender}
-          onChange={(e) => onGenderChange(e.target.value)}
-          aria-label="Filter by gender"
-          title="Filter by gender"
+          value={pageSize}
+          onChange={(e) => onPageSizeChange(e.target.value)}
+          aria-label="Rows per page"
+          title="Rows per page"
         >
-          <option value="">All Genders</option>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-          <option value="Other">Other</option>
-          <option value="Prefer not to say">Prefer not to say</option>
+          <option value="10">10 rows/page</option>
+          <option value="20">20 rows/page</option>
+          <option value="50">50 rows/page</option>
+          <option value="all">All rows</option>
         </select>
       </div>
+
+      {/* Clear Filter Button */}
+      <button
+        type="button"
+        className={`${styles.clearBtn} ${hasActiveFilters ? styles.clearBtnActive : ''}`}
+        onClick={onClearFilters}
+        disabled={!hasActiveFilters}
+        title="Reset search and filters to default"
+      >
+        Clear Filter
+      </button>
     </div>
   );
 };

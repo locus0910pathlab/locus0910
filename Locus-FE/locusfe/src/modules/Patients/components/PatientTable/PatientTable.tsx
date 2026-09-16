@@ -1,17 +1,27 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Eye, Trash2, Calendar, Phone } from 'lucide-react';
+import { Eye, Trash2, Calendar, Phone, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Patient } from '../../../../types/common.types';
 import styles from './PatientTable.module.css';
 
 export interface PatientTableProps {
   patients: Patient[];
   onDelete?: (id: number) => void;
+  totalCount?: number;
+  currentPage?: number;
+  totalPages?: number;
+  pageSize?: string;
+  onPageChange?: (newPage: number) => void;
 }
 
 export const PatientTable: React.FC<PatientTableProps> = ({
   patients,
   onDelete,
+  totalCount,
+  currentPage,
+  totalPages,
+  pageSize,
+  onPageChange,
 }) => {
   const navigate = useNavigate();
 
@@ -119,6 +129,49 @@ export const PatientTable: React.FC<PatientTableProps> = ({
           })}
         </tbody>
       </table>
+
+      {totalCount !== undefined && totalCount > 0 && (
+        <div className={styles.paginationBar}>
+          <div className={styles.paginationInfo}>
+            {pageSize === 'all'
+              ? `Showing all ${totalCount} patient records`
+              : `Showing ${Math.min((currentPage! - 1) * parseInt(pageSize!, 10) + 1, totalCount)}–${Math.min(
+                  currentPage! * parseInt(pageSize!, 10),
+                  totalCount
+                )} of ${totalCount} patients`}
+          </div>
+
+          {pageSize !== 'all' && totalPages! > 1 && (
+            <div className={styles.paginationControls}>
+              <button
+                className={styles.pageBtn}
+                onClick={() => onPageChange && onPageChange(currentPage! - 1)}
+                disabled={currentPage === 1}
+                aria-label="Previous Page"
+                title="Previous Page"
+              >
+                <ChevronLeft size={16} />
+                <span>Prev</span>
+              </button>
+
+              <span className={styles.pageIndicator}>
+                Page {currentPage} of {totalPages}
+              </span>
+
+              <button
+                className={styles.pageBtn}
+                onClick={() => onPageChange && onPageChange(currentPage! + 1)}
+                disabled={currentPage === totalPages}
+                aria-label="Next Page"
+                title="Next Page"
+              >
+                <span>Next</span>
+                <ChevronRight size={16} />
+              </button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

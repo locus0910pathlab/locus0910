@@ -5,11 +5,10 @@ import {
   Users,
   Calendar,
   FlaskConical,
-  ChevronLeft,
-  ChevronRight,
+  Menu,
   X,
 } from 'lucide-react';
-import logoImg from '../../assets/logo.png';
+import LocusLogo from '../LocusLogo/LocusLogo';
 import styles from './Sidebar.module.css';
 
 export interface SidebarProps {
@@ -42,28 +41,23 @@ export const Sidebar: React.FC<SidebarProps> = ({
           isOpen ? styles.mobileOpen : ''
         }`}
       >
-        <div className={styles.brand}>
-          <div className={styles.brandLeft}>
-            {!isCollapsed ? (
-              <div className={styles.logoExpandedWrapper}>
-                <img src={logoImg} alt="Locus Pathology Lab" className={styles.logoImg} />
-              </div>
-            ) : (
-              <div className={styles.logoCollapsedWrapper} title="Locus Pathology Lab">
-                <img src={logoImg} alt="Locus Pathology Lab" className={styles.logoImgCollapsed} />
-              </div>
-            )}
-          </div>
-
-          {/* Desktop collapse toggle */}
+        <div className={`${styles.brand} ${isCollapsed ? styles.brandCollapsed : ''}`}>
+          {/* Retraction button placed next to and BEFORE the logo */}
           <button
-            className={styles.toggleBtn}
+            className={styles.retractBtn}
             onClick={onToggleCollapse}
             title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            aria-label="Toggle sidebar"
+            aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           >
-            {isCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+            <Menu size={19} />
           </button>
+
+          {/* Exact Vector Logo */}
+          {!isCollapsed && (
+            <div className={styles.logoExpandedWrapper}>
+              <LocusLogo variant="full" height={42} />
+            </div>
+          )}
 
           {/* Mobile close button */}
           <button

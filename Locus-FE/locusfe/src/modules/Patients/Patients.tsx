@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserPlus } from 'lucide-react';
 import { PatientTable } from './components/PatientTable/PatientTable';
@@ -8,34 +8,43 @@ import { Button } from '../../components/Button/Button';
 import patientsService from './services/patients.service';
 import { Patient } from '../../types/common.types';
 import { PatientSortOption } from './types/patients.types';
+import { useDebounce } from '../../hooks/useDebounce';
 import styles from './Patients.module.css';
 
 export const Patients: React.FC = () => {
   const navigate = useNavigate();
   const [patients, setPatients] = useState<Patient[]>([]);
   const [search, setSearch] = useState('');
-  const [genderFilter, setGenderFilter] = useState('');
+  const debouncedSearch = useDebounce(search, 500);
+  const [pageSize, setPageSize] = useState<string>('10');
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [sortBy, setSortBy] = useState<PatientSortOption>('date_added_desc');
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchPatients = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const data = await patientsService.getPatients(search);
-      setPatients(data || []);
-    } catch (err) {
-      console.error('Failed to fetch patients:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [search]);
-
+  // Fetch patients only on mount and when debouncedSearch changes (500ms after user stops typing)
   useEffect(() => {
-    const timer = setTimeout(() => {
-      fetchPatients();
-    }, 250);
-    return () => clearTimeout(timer);
-  }, [fetchPatients]);
+    let active = true;
+    const loadPatients = async () => {
+      setIsLoading(true);
+      try {
+        const data = await patientsService.getPatients(debouncedSearch);
+        if (active) {
+          setPatients(data || []);
+        }
+      } catch (err) {
+        console.error('Failed to fetch patients:', err);
+      } finally {
+        if (active) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    loadPatients();
+    return () => {
+      active = false;
+    };
+  }, [debouncedSearch]);
 
   const handleDelete = async (id: number) => {
     try {
@@ -46,16 +55,8 @@ export const Patients: React.FC = () => {
     }
   };
 
-  // Filter patients
-  const filteredPatients = patients.filter((patient) => {
-    if (genderFilter && patient.gender !== genderFilter) {
-      return false;
-    }
-    return true;
-  });
-
   // Sort patients based on selected option
-  const sortedPatients = [...filteredPatients].sort((a, b) => {
+  const sortedPatients = [...patients].sort((a, b) => {
     switch (sortBy) {
       case 'name_asc': {
         const nameA = `${a.first_name} ${a.last_name}`.toLowerCase();
@@ -87,16 +88,52 @@ export const Patients: React.FC = () => {
     }
   });
 
+  // Calculate pagination
+  const totalCount = sortedPatients.length;
+  const isAll = pageSize === 'all';
+  const limit = isAll ? totalCount : parseInt(pageSize, 10);
+  const totalPages = isAll ? 1 : Math.max(1, Math.ceil(totalCount / limit));
+  const validPage = Math.min(Math.max(1, currentPage), totalPages);
+  const startIndex = isAll ? 0 : (validPage - 1) * limit;
+  const paginatedPatients = isAll ? sortedPatients : sortedPatients.slice(startIndex, startIndex + limit);
+
+  const handlePageSizeChange = (val: string) => {
+    setPageSize(val);
+    setCurrentPage(1);
+  };
+
+  const handleSortChange = (val: PatientSortOption) => {
+    setSortBy(val);
+    setCurrentPage(1);
+  };
+
+  const hasActiveFilters = Boolean(search.trim()) || sortBy !== 'date_added_desc' || pageSize !== '10';
+
+  const handleClearFilters = () => {
+    setSearch('');
+    setSortBy('date_added_desc');
+    setPageSize('10');
+    setCurrentPage(1);
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.topBar}>
         <div className={styles.controls}>
-          <PatientSearch value={search} onChange={setSearch} />
+          <PatientSearch
+            value={search}
+            onChange={(val) => {
+              setSearch(val);
+              setCurrentPage(1);
+            }}
+          />
           <PatientFilters
-            gender={genderFilter}
-            onGenderChange={setGenderFilter}
             sortBy={sortBy}
-            onSortChange={setSortBy}
+            onSortChange={handleSortChange}
+            pageSize={pageSize}
+            onPageSizeChange={handlePageSizeChange}
+            onClearFilters={handleClearFilters}
+            hasActiveFilters={hasActiveFilters}
           />
         </div>
         <Button
@@ -111,7 +148,15 @@ export const Patients: React.FC = () => {
       {isLoading ? (
         <div className={styles.loading}>Loading clinical patient records...</div>
       ) : (
-        <PatientTable patients={sortedPatients} onDelete={handleDelete} />
+        <PatientTable
+          patients={paginatedPatients}
+          onDelete={handleDelete}
+          totalCount={totalCount}
+          currentPage={validPage}
+          totalPages={totalPages}
+          pageSize={pageSize}
+          onPageChange={setCurrentPage}
+        />
       )}
     </div>
   );

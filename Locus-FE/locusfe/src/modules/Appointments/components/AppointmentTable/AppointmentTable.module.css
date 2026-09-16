@@ -61,6 +61,13 @@
   border: 1px solid var(--primary-100);
 }
 
+/* Patient Column */
+.patientCol {
+  padding-left: 20px !important;
+  padding-right: 22px !important;
+  min-width: 220px;
+}
+
 /* Patient Cell */
 .patientCell {
   display: flex;
@@ -280,5 +287,57 @@
 
   .actions {
     justify-content: flex-end;
+  }
+}
+
+/* Desktop Column Width Alignment with Top Filter Bar */
+@media (min-width: 992px) {
+  .table {
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  .apptCol {
+    width: 75px;
+    box-sizing: border-box;
+  }
+
+  .patientCol {
+    width: auto;
+    box-sizing: border-box;
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+  }
+
+  .dateCol {
+    width: 212px;
+    box-sizing: border-box;
+    text-align: center;
+    padding-left: 20px !important;
+    padding-right: 8px !important;
+  }
+
+  .statusCol {
+    width: 162px;
+    box-sizing: border-box;
+    text-align: center;
+    padding-left: 20px !important;
+    padding-right: 8px !important;
+  }
+
+  .amountCol {
+    width: 128px;
+    box-sizing: border-box;
+    text-align: center;
+    padding-left: 20px !important;
+    padding-right: 8px !important;
+  }
+
+  .actionsCol {
+    width: 204px;
+    box-sizing: border-box;
+    text-align: center;
+    padding-left: 20px !important;
+    padding-right: 8px !important;
   }
 }
