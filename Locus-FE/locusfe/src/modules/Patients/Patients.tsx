@@ -118,24 +118,23 @@ export const Patients: React.FC = () => {
 
   return (
     <div className={styles.container}>
+      {/* Top Bar with Search, Filters, and Add Patient Action */}
       <div className={styles.topBar}>
-        <div className={styles.controls}>
-          <PatientSearch
-            value={search}
-            onChange={(val) => {
-              setSearch(val);
-              setCurrentPage(1);
-            }}
-          />
-          <PatientFilters
-            sortBy={sortBy}
-            onSortChange={handleSortChange}
-            pageSize={pageSize}
-            onPageSizeChange={handlePageSizeChange}
-            onClearFilters={handleClearFilters}
-            hasActiveFilters={hasActiveFilters}
-          />
-        </div>
+        <PatientSearch
+          value={search}
+          onChange={(val) => {
+            setSearch(val);
+            setCurrentPage(1);
+          }}
+        />
+        <PatientFilters
+          sortBy={sortBy}
+          onSortChange={handleSortChange}
+          pageSize={pageSize}
+          onPageSizeChange={handlePageSizeChange}
+          onClearFilters={handleClearFilters}
+          hasActiveFilters={hasActiveFilters}
+        />
         <Button
           leftIcon={<UserPlus size={18} />}
           onClick={() => navigate('/patients/new')}

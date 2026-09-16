@@ -149,7 +149,7 @@ export const RecentAppointments: React.FC<RecentAppointmentsProps> = ({ appointm
                       setSelectedVisit(apt);
                     }}
                   >
-                    <Eye size={13} />
+                    <Eye size={14} />
                     <span>View</span>
                   </button>
                 </div>

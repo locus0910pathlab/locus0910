@@ -1,35 +1,19 @@
 .filters {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-@media (min-width: 992px) {
-  .sortSelect {
-    width: 200px;
-    min-width: 200px;
-  }
-
-  .statusSelect {
-    width: 150px;
-    min-width: 150px;
-  }
-
-  .clearBtn {
-    width: 116px;
-    min-width: 116px;
-    padding: 0;
-    justify-content: center;
-  }
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  width: 100%;
 }
 
 .selectGroup {
+  width: 100%;
   display: flex;
   align-items: center;
 }
 
 .select {
+  width: 100%;
+  min-width: 0;
   padding: 8px 38px 8px 14px;
   font-size: 13px;
   font-weight: 500;
@@ -47,6 +31,7 @@
   background-repeat: no-repeat;
   background-position: right 14px center;
   background-size: 14px 14px;
+  white-space: nowrap;
 }
 
 .select:hover {
@@ -59,6 +44,8 @@
 }
 
 .clearBtn {
+  grid-column: span 2;
+  width: 100%;
   height: 38px;
   padding: 0 16px;
   border: 1px solid var(--border-subtle);
@@ -92,24 +79,34 @@
   box-shadow: 0 2px 6px rgba(225, 29, 72, 0.25);
 }
 
-@media (max-width: 768px) {
+@media (min-width: 1281px) {
   .filters {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: auto;
+    flex-shrink: 0;
   }
 
   .selectGroup {
-    width: 100%;
+    width: auto;
   }
 
-  .select {
-    width: 100%;
+  .sortSelect {
+    width: 200px;
+    min-width: 200px;
+  }
+
+  .statusSelect {
+    width: 150px;
+    min-width: 150px;
   }
 
   .clearBtn {
-    grid-column: span 2;
-    width: 100%;
+    width: 116px;
+    min-width: 116px;
+    padding: 0;
+    justify-content: center;
+    grid-column: auto;
   }
 }

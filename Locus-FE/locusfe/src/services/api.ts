@@ -1,6 +1,17 @@
 import { RequestOptions, ApiError } from './api.types';
 
-const BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000/api/v1';
+const getInitialBaseUrl = (): string => {
+  if (process.env.REACT_APP_API_BASE_URL) {
+    return process.env.REACT_APP_API_BASE_URL;
+  }
+  // In production on Vercel, default to same-domain relative '/api/v1'
+  if (process.env.NODE_ENV === 'production') {
+    return '/api/v1';
+  }
+  return 'http://localhost:8000/api/v1';
+};
+
+const BASE_URL = getInitialBaseUrl();
 const CACHE_PREFIX = 'locus_cache:';
 
 interface CacheItem<T> {
@@ -18,7 +29,15 @@ class ApiClient {
 
   private buildUrl(endpoint: string, params?: Record<string, string | number | boolean | undefined | null>): string {
     const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
-    const url = new URL(`${this.baseUrl}${cleanEndpoint}`);
+    let url: URL;
+
+    if (this.baseUrl.startsWith('http://') || this.baseUrl.startsWith('https://')) {
+      url = new URL(`${this.baseUrl}${cleanEndpoint}`);
+    } else {
+      const origin = typeof window !== 'undefined' && window.location ? window.location.origin : 'http://localhost:3000';
+      const cleanBase = this.baseUrl.startsWith('/') ? this.baseUrl : `/${this.baseUrl}`;
+      url = new URL(`${cleanBase}${cleanEndpoint}`, origin);
+    }
 
     if (params) {
       Object.entries(params).forEach(([key, value]) => {

@@ -8,34 +8,21 @@
 .topBar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 12px;
-  flex-wrap: wrap;
-}
-
-.controls {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex: 1;
-  flex-wrap: wrap;
+  width: 100%;
+  flex-wrap: nowrap;
 }
 
 .searchWrapper {
   flex: 1;
-  min-width: 240px;
+  min-width: 200px;
 }
 
 .createApptBtn {
+  width: 192px;
+  min-width: 192px;
   flex-shrink: 0;
-}
-
-@media (min-width: 992px) {
-  .createApptBtn {
-    width: 192px;
-    min-width: 192px;
-    justify-content: center;
-  }
+  justify-content: center;
 }
 
 .loading {
@@ -45,15 +32,16 @@
   font-size: 14px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1280px) {
   .topBar {
+    display: flex;
     flex-direction: column;
     align-items: stretch;
+    gap: 10px;
+    width: 100%;
   }
 
-  .controls {
-    flex-direction: column;
-    align-items: stretch;
+  .searchWrapper {
     width: 100%;
   }
 

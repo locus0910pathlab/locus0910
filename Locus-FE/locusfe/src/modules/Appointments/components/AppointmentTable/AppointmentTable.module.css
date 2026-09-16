@@ -291,7 +291,7 @@
 }
 
 /* Desktop Column Width Alignment with Top Filter Bar */
-@media (min-width: 992px) {
+@media (min-width: 1281px) {
   .table {
     table-layout: fixed;
     width: 100%;

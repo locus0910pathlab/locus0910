@@ -116,13 +116,13 @@
 .viewBtn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 7px 14px;
+  gap: 5px;
+  padding: 6px 12px;
   border-radius: var(--radius-md);
-  background-color: var(--primary-600);
-  color: white;
-  border: 1px solid var(--primary-600);
-  font-size: 13px;
+  border: 1px solid var(--primary-200);
+  background-color: var(--primary-50);
+  color: var(--primary-700);
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: all var(--transition-fast);
@@ -130,8 +130,9 @@
 }
 
 .viewBtn:hover {
-  background-color: var(--primary-700);
-  border-color: var(--primary-700);
+  background-color: var(--primary-100);
+  border-color: var(--primary-300);
+  color: var(--primary-800);
 }
 
 .deleteBtn {

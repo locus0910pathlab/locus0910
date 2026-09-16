@@ -124,28 +124,24 @@ export const Appointments: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      {/* Top Header Bar matching Patients page pattern */}
+      {/* Top Bar with Search, Filters, and Create Action */}
       <div className={styles.topBar}>
-        <div className={styles.controls}>
-          <div className={styles.searchWrapper}>
-            <Input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search by patient, phone, appt #, or test..."
-              leftIcon={<Search size={16} />}
-            />
-          </div>
-          <AppointmentFilters
-            status={statusFilter}
-            onStatusChange={setStatusFilter}
-            sortBy={sortBy}
-            onSortChange={setSortBy}
-            onClearFilters={handleClearFilters}
-            hasActiveFilters={hasActiveFilters}
+        <div className={styles.searchWrapper}>
+          <Input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search by patient, phone, appt #, or test..."
+            leftIcon={<Search size={16} />}
           />
         </div>
-
-        {/* Prominent Create Appointment button on top */}
+        <AppointmentFilters
+          status={statusFilter}
+          onStatusChange={setStatusFilter}
+          sortBy={sortBy}
+          onSortChange={setSortBy}
+          onClearFilters={handleClearFilters}
+          hasActiveFilters={hasActiveFilters}
+        />
         <Button
           leftIcon={<CalendarPlus size={18} />}
           onClick={() => navigate('/appointments/new')}
