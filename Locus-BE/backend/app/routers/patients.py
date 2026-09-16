@@ -9,6 +9,7 @@ from app.services.patient_service import PatientService
 router = APIRouter(prefix="/patients", tags=["Patients"])
 
 
+@router.post("", response_model=PatientResponse, status_code=status.HTTP_201_CREATED, include_in_schema=False)
 @router.post("/", response_model=PatientResponse, status_code=status.HTTP_201_CREATED)
 def create_patient(patient_in: PatientCreate, db: Session = Depends(get_db)):
     """Create a new patient record."""
@@ -22,6 +23,7 @@ def create_patient(patient_in: PatientCreate, db: Session = Depends(get_db)):
     return PatientService.create(db, patient_in)
 
 
+@router.get("", response_model=List[PatientResponse], include_in_schema=False)
 @router.get("/", response_model=List[PatientResponse])
 def get_patients(
     skip: int = Query(0, ge=0),

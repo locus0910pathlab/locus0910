@@ -9,6 +9,7 @@ from app.services.test_service import TestService
 router = APIRouter(prefix="/tests", tags=["Tests"])
 
 
+@router.post("", response_model=TestResponse, status_code=status.HTTP_201_CREATED, include_in_schema=False)
 @router.post("/", response_model=TestResponse, status_code=status.HTTP_201_CREATED)
 def create_test(test_in: TestCreate, db: Session = Depends(get_db)):
     """Create a new diagnostic test catalog item."""
@@ -21,6 +22,7 @@ def create_test(test_in: TestCreate, db: Session = Depends(get_db)):
     return TestService.create(db, test_in)
 
 
+@router.get("", response_model=List[TestResponse], include_in_schema=False)
 @router.get("/", response_model=List[TestResponse])
 def get_tests(
     skip: int = Query(0, ge=0),

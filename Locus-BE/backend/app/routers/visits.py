@@ -17,6 +17,7 @@ from app.services.visit_service import VisitService
 router = APIRouter(prefix="/visits", tags=["Visits"])
 
 
+@router.post("", response_model=VisitResponse, status_code=status.HTTP_201_CREATED, include_in_schema=False)
 @router.post("/", response_model=VisitResponse, status_code=status.HTTP_201_CREATED)
 def create_visit(visit_in: VisitCreate, db: Session = Depends(get_db)):
     """Create a new patient visit and order tests."""
@@ -29,6 +30,7 @@ def create_visit(visit_in: VisitCreate, db: Session = Depends(get_db)):
     return VisitService.create(db, visit_in)
 
 
+@router.get("", response_model=List[VisitResponse], include_in_schema=False)
 @router.get("/", response_model=List[VisitResponse])
 def get_visits(
     skip: int = Query(0, ge=0),
