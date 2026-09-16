@@ -79,10 +79,26 @@
   background-color: var(--text-muted);
 }
 
+.centerTh {
+  text-align: center;
+}
+
+.centerTd {
+  text-align: center;
+}
+
+.priceCol {
+  text-align: center;
+}
+
+.actionsCol {
+  text-align: center;
+}
+
 .actions {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
   gap: 8px;
 }
 
@@ -143,6 +159,14 @@
   .table td,
   .table th {
     padding: 12px 14px;
+  }
+
+  .priceCol {
+    text-align: left !important;
+  }
+
+  .actionsCol {
+    text-align: right !important;
   }
 
   .actions {

@@ -28,11 +28,11 @@ export const TestTable: React.FC<TestTableProps> = ({ tests, onEdit, onView, onD
           <tr>
             <th>Test Code</th>
             <th className={styles.desktopOnly}>Name & Description</th>
-            <th className={styles.desktopOnly}>Category</th>
-            <th className={styles.desktopOnly}>Turnaround</th>
-            <th>Price</th>
-            <th className={styles.desktopOnly}>Status</th>
-            <th style={{ textAlign: 'right' }}>Actions</th>
+            <th className={`${styles.desktopOnly} ${styles.centerTh}`}>Category</th>
+            <th className={`${styles.desktopOnly} ${styles.centerTh}`}>Turnaround</th>
+            <th className={styles.priceCol}>Price</th>
+            <th className={`${styles.desktopOnly} ${styles.centerTh}`}>Status</th>
+            <th className={styles.actionsCol}>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -49,19 +49,19 @@ export const TestTable: React.FC<TestTableProps> = ({ tests, onEdit, onView, onD
                   </div>
                 )}
               </td>
-              <td className={styles.desktopOnly}>
+              <td className={`${styles.desktopOnly} ${styles.centerTd}`}>
                 <span className={styles.categoryTag}>{test.category || 'General'}</span>
               </td>
-              <td className={styles.desktopOnly}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: 'var(--text-secondary)' }}>
+              <td className={`${styles.desktopOnly} ${styles.centerTd}`}>
+                <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '13px', color: 'var(--text-secondary)' }}>
                   <Clock size={14} color="#f8bc25ff" />
                   <span>{test.turnaround_hours || 24}h</span>
                 </div>
               </td>
-              <td>
+              <td className={styles.priceCol}>
                 <span className={styles.price}>₹{Number(test.price).toFixed(2)}</span>
               </td>
-              <td className={styles.desktopOnly}>
+              <td className={`${styles.desktopOnly} ${styles.centerTd}`}>
                 <span className={styles.activeStatus}>
                   <span
                     className={
@@ -71,7 +71,7 @@ export const TestTable: React.FC<TestTableProps> = ({ tests, onEdit, onView, onD
                   <span>{test.is_active ? 'Active' : 'Inactive'}</span>
                 </span>
               </td>
-              <td>
+              <td className={styles.actionsCol}>
                 <div className={styles.actions}>
                   {handleView && (
                     <button
