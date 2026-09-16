@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard,
@@ -7,7 +7,9 @@ import {
   FlaskConical,
   Menu,
   X,
+  RotateCw,
 } from 'lucide-react';
+import { api } from '../../services/api';
 import LocusLogo from '../LocusLogo/LocusLogo';
 import styles from './Sidebar.module.css';
 
@@ -30,6 +32,35 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { to: '/appointments', label: 'Appointments', icon: <Calendar size={19} /> },
     { to: '/tests', label: 'Lab Tests', icon: <FlaskConical size={19} /> },
   ];
+
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleRefresh = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (isRefreshing) return;
+
+    setIsRefreshing(true);
+    try {
+      // Clear localStorage, sessionStorage and API cache
+      localStorage.clear();
+      sessionStorage.clear();
+      api.clearCache();
+
+      // Clear Service Worker CacheStorage if available
+      if ('caches' in window) {
+        const cacheNames = await window.caches.keys();
+        await Promise.all(cacheNames.map((name) => window.caches.delete(name)));
+      }
+    } catch (err) {
+      console.error('Error clearing local cache:', err);
+    }
+
+    // Brief delay to display spinning effect then reload with fresh data
+    setTimeout(() => {
+      window.location.reload();
+    }, 350);
+  };
 
   return (
     <>
@@ -101,6 +132,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <span className={styles.userRole}>Founder & Lab Admin</span>
             </div>
           )}
+          <button
+            type="button"
+            className={`${styles.refreshBtn} ${isRefreshing ? styles.refreshing : ''}`}
+            onClick={handleRefresh}
+            title="Clear device local storage & recall latest data"
+            aria-label="Refresh and sync data"
+            disabled={isRefreshing}
+          >
+            <RotateCw size={15} />
+          </button>
         </div>
       </aside>
     </>
