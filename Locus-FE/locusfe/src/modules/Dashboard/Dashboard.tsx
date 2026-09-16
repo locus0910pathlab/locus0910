@@ -27,6 +27,8 @@ export const Dashboard: React.FC = () => {
     };
   }, []);
 
+  const currentMonthShort = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(new Date()).toUpperCase();
+
   return (
     <div className={styles.dashboard}>
       <div className={styles.quickActions}>
@@ -68,11 +70,12 @@ export const Dashboard: React.FC = () => {
           color="emerald"
         />
         <StatsCard
-          title="Total Visits / Orders"
+          title="Total Visits / Month"
           value={isLoading ? '...' : (data?.stats.totalVisits ?? 0)}
           subtext="Clinical orders logged"
           icon={<CalendarCheck size={22} />}
           color="violet"
+          badge={currentMonthShort}
         />
         <StatsCard
           title="Pending Diagnostics"

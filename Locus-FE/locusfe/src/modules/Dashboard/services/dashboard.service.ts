@@ -6,14 +6,26 @@ export const dashboardService = {
   async getDashboardData(): Promise<DashboardData> {
     try {
       const [patients, tests, visits] = await Promise.all([
-        api.get<Patient[]>('/patients/', { limit: 10 }).catch(() => []),
-        api.get<LabTest[]>('/tests/', { limit: 50 }).catch(() => []),
-        api.get<Visit[]>('/visits/', { limit: 20 }).catch(() => []),
+        api.get<Patient[]>('/patients/', { limit: 100 }).catch(() => []),
+        api.get<LabTest[]>('/tests/', { limit: 100 }).catch(() => []),
+        api.get<Visit[]>('/visits/', { limit: 500 }).catch(() => []),
       ]);
+
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      const currentMonth = now.getMonth();
+
+      // Only count visits belonging to current month (refreshes on 1st date of each month)
+      const currentMonthVisits = visits.filter((v) => {
+        const rawDate = v.visit_date || v.created_at;
+        if (!rawDate) return false;
+        const d = new Date(rawDate);
+        return !isNaN(d.getTime()) && d.getFullYear() === currentYear && d.getMonth() === currentMonth;
+      });
 
       const totalPatients = patients.length;
       const activeTests = tests.filter((t) => t.is_active).length;
-      const totalVisits = visits.length;
+      const totalVisits = currentMonthVisits.length;
 
       let pendingResults = 0;
       let revenue = 0;
@@ -39,7 +51,7 @@ export const dashboardService = {
         },
         recentPatients: patients.slice(0, 5),
         recentVisits: visits.slice(0, 5),
-        popularTests: tests.slice(0, 5),
+        popularTests: tests,
       };
     } catch (err) {
       console.warn('Using default dashboard metrics due to API connection state:', err);

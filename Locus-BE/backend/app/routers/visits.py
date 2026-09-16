@@ -32,7 +32,7 @@ def create_visit(visit_in: VisitCreate, db: Session = Depends(get_db)):
 @router.get("/", response_model=List[VisitResponse])
 def get_visits(
     skip: int = Query(0, ge=0),
-    limit: int = Query(50, ge=1, le=100),
+    limit: int = Query(50, ge=1, le=1000),
     patient_id: Optional[int] = Query(None, description="Filter by patient ID"),
     visit_status: Optional[VisitStatus] = Query(None, alias="status", description="Filter by visit status"),
     db: Session = Depends(get_db),

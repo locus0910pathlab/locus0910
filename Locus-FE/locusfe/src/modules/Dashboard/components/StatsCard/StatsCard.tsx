@@ -7,6 +7,7 @@ export interface StatsCardProps {
   subtext?: string;
   icon: React.ReactNode;
   color?: 'blue' | 'emerald' | 'amber' | 'rose' | 'violet';
+  badge?: string;
 }
 
 export const StatsCard: React.FC<StatsCardProps> = ({
@@ -15,11 +16,19 @@ export const StatsCard: React.FC<StatsCardProps> = ({
   subtext,
   icon,
   color = 'blue',
+  badge,
 }) => {
   return (
     <div className={styles.card}>
       <div className={styles.info}>
-        <span className={styles.label}>{title}</span>
+        <div className={styles.labelRow}>
+          <span className={styles.label}>{title}</span>
+          {badge && (
+            <span className={`${styles.badge} ${styles[`badge_${color}`]}`}>
+              {badge}
+            </span>
+          )}
+        </div>
         <span className={styles.value}>{value}</span>
         {subtext && <span className={styles.subtext}>{subtext}</span>}
       </div>

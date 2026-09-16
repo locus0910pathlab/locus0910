@@ -135,9 +135,9 @@
 }
 
 .deleteBtn {
-  background: none;
-  border: 1px solid var(--border-strong);
-  color: var(--text-muted);
+  background-color: var(--accent-rose-light);
+  border: 1px solid rgba(244, 63, 94, 0.35);
+  color: var(--accent-rose);
   padding: 7px 9px;
   border-radius: var(--radius-md);
   cursor: pointer;
@@ -148,9 +148,11 @@
 }
 
 .deleteBtn:hover {
-  background-color: var(--accent-rose-light);
-  color: var(--accent-rose);
+  background-color: var(--accent-rose);
+  color: #ffffff;
   border-color: var(--accent-rose);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(244, 63, 94, 0.25);
 }
 
 .emptyState {

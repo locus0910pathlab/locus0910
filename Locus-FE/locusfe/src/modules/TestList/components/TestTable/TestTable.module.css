@@ -85,18 +85,24 @@
 }
 
 .deleteBtn {
-  background: none;
-  border: none;
-  color: var(--text-muted);
+  background-color: var(--accent-rose-light);
+  border: 1px solid rgba(244, 63, 94, 0.35);
+  color: var(--accent-rose);
   cursor: pointer;
   padding: 6px;
   border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   transition: all var(--transition-fast);
 }
 
 .deleteBtn:hover {
-  background-color: var(--accent-rose-light);
-  color: var(--accent-rose);
+  background-color: var(--accent-rose);
+  border-color: var(--accent-rose);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(244, 63, 94, 0.25);
 }
 
 .empty {
