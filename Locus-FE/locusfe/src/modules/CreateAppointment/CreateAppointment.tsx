@@ -373,8 +373,7 @@ export const CreateAppointment: React.FC = () => {
               <div className={styles.selectedPatientBadge}>
                 <div className={styles.selectedPatientInfo}>
                   <div className={styles.avatar}>
-                    {selectedPatient.first_name[0]}
-                    {selectedPatient.last_name[0]}
+                    {`${selectedPatient.first_name?.[0] || ''}${selectedPatient.last_name?.[0] || ''}`.toUpperCase() || 'PT'}
                   </div>
                   <div>
                     <div style={{ fontWeight: 700, fontSize: '15px' }}>
@@ -399,18 +398,17 @@ export const CreateAppointment: React.FC = () => {
                       alignItems: 'center',
                       gap: '4px',
                       fontSize: '12px',
-                      fontWeight: 600,
                     }}
                   >
-                    <X size={16} />
-                    <span>Change</span>
+                    Change
                   </button>
                 )}
               </div>
             ) : (
               <div className={styles.patientSearchWrapper}>
                 <Input
-                  placeholder="Search by patient name, phone number, or ID..."
+                  label="Search Patient by Name, Mobile Number, or ID"
+                  placeholder="e.g. Rushikesh, 9876543210..."
                   value={patientSearch}
                   onChange={(e) => setPatientSearch(e.target.value)}
                   leftIcon={<Search size={16} />}
@@ -425,12 +423,17 @@ export const CreateAppointment: React.FC = () => {
                         className={styles.patientOption}
                         onClick={() => handleSelectPatient(p)}
                       >
-                        <div>
-                          <div style={{ fontWeight: 600, fontSize: '14px' }}>
-                            {p.first_name} {p.last_name}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <div className={styles.avatar}>
+                            {`${p.first_name?.[0] || ''}${p.last_name?.[0] || ''}`.toUpperCase() || 'PT'}
                           </div>
-                          <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                            ID: #{p.id} • {p.phone || 'No phone'} • {p.gender || 'Gender: N/A'}
+                          <div>
+                            <div style={{ fontWeight: 600, fontSize: '14px' }}>
+                              {p.first_name} {p.last_name}
+                            </div>
+                            <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                              ID: #{p.id} • {p.phone || 'No phone'} • {p.gender || 'Gender: N/A'}
+                            </div>
                           </div>
                         </div>
                         <ChevronRight size={16} color="var(--text-muted)" />

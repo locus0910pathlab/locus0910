@@ -48,7 +48,7 @@ export const PatientTable: React.FC<PatientTableProps> = ({
         </thead>
         <tbody>
           {patients.map((patient) => {
-            const initials = `${patient.first_name[0] || ''}${patient.last_name[0] || ''}`.toUpperCase();
+            const initials = `${patient.first_name?.[0] || ''}${patient.last_name?.[0] || ''}`.toUpperCase() || 'PT';
             const formattedDate = patient.created_at
               ? new Date(patient.created_at).toLocaleDateString('en-US', {
                   year: 'numeric',

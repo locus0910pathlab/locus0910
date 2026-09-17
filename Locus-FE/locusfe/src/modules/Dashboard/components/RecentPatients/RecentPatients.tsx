@@ -24,7 +24,7 @@ export const RecentPatients: React.FC<RecentPatientsProps> = ({ patients }) => {
       ) : (
         <div className={styles.list}>
           {patients.map((patient) => {
-            const initials = `${patient.first_name[0] || ''}${patient.last_name[0] || ''}`.toUpperCase();
+            const initials = `${patient.first_name?.[0] || ''}${patient.last_name?.[0] || ''}`.toUpperCase() || 'PT';
             return (
               <Link
                 to={`/patients/${patient.id}`}

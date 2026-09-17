@@ -9,7 +9,7 @@ export interface PatientInfoProps {
 }
 
 export const PatientInfo: React.FC<PatientInfoProps> = ({ patient, onEdit }) => {
-  const initials = `${patient.first_name[0] || ''}${patient.last_name[0] || ''}`.toUpperCase();
+  const initials = `${patient.first_name?.[0] || ''}${patient.last_name?.[0] || ''}`.toUpperCase() || 'PT';
 
   return (
     <div className={styles.card}>

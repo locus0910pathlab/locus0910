@@ -107,9 +107,9 @@ export const RecentAppointments: React.FC<RecentAppointmentsProps> = ({ appointm
         <div className={styles.list}>
           {sortedAppointments.map((apt) => {
             const patient = apt.patient;
-            const initials = patient?.first_name
-              ? patient.first_name[0].toUpperCase()
-              : 'P';
+            const initials = patient
+              ? `${patient.first_name?.[0] || ''}${patient.last_name?.[0] || ''}`.toUpperCase() || 'PT'
+              : 'PT';
 
             const dateObj = new Date(apt.visit_date);
             const formattedDate = !isNaN(dateObj.getTime())

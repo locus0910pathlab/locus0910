@@ -59,18 +59,24 @@ export const DuplicatePhoneModal: React.FC<DuplicatePhoneModalProps> = ({
           <div className={styles.patientsList}>
             {existingPatients.map((patient) => {
               const city = extractCity(patient.residential_address);
+              const initials = `${patient.first_name?.[0] || ''}${patient.last_name?.[0] || ''}`.toUpperCase() || 'PT';
 
               return (
                 <div key={patient.id} className={styles.patientCard}>
                   <div className={styles.patientInfo}>
-                    <span className={styles.patientName}>
-                      {patient.first_name} {patient.last_name}
-                    </span>
-                    <span className={styles.patientId}>#PAT-{patient.id}</span>
-                    <span className={styles.cityBadge}>
-                      <MapPin size={12} />
-                      {city}
-                    </span>
+                    <div className={styles.avatar}>{initials}</div>
+                    <div>
+                      <div className={styles.patientName}>
+                        {patient.first_name} {patient.last_name}
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '3px' }}>
+                        <span className={styles.patientId}>#PAT-{patient.id}</span>
+                        <span className={styles.cityBadge}>
+                          <MapPin size={12} />
+                          {city}
+                        </span>
+                      </div>
+                    </div>
                   </div>
 
                   <a
