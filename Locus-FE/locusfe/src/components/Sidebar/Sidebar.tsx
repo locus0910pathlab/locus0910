@@ -83,11 +83,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <Menu size={19} />
           </button>
 
-          {/* Exact Vector Logo */}
+          {/* Brand Logo */}
           {!isCollapsed && (
-            <div className={styles.logoExpandedWrapper}>
-              <LocusLogo variant="full" height={42} />
-            </div>
+            <NavLink to="/" className={styles.logoExpandedWrapper} title="Locus Pathology Lab - Go to Dashboard">
+              <LocusLogo variant="full" height={44} />
+            </NavLink>
           )}
 
           {/* Mobile close button */}

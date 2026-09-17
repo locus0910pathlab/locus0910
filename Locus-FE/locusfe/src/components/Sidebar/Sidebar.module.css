@@ -75,6 +75,14 @@
   align-items: center;
   overflow: hidden;
   flex: 1;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+.logoExpandedWrapper:hover {
+  opacity: 0.94;
+  transform: translateY(-0.5px);
 }
 
 .closeMobileBtn {
