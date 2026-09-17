@@ -15,6 +15,31 @@ class PatientService:
         return db.query(Patient).filter(Patient.email == email).first()
 
     @staticmethod
+    def get_by_phone(db: Session, phone: str) -> List[Patient]:
+        if not phone:
+            return []
+        import re
+        digits = re.sub(r'\D', '', phone)
+        if not digits:
+            return []
+        sig = digits[-10:] if len(digits) >= 10 else digits
+        if len(sig) < 5:
+            return []
+
+        candidates = (
+            db.query(Patient)
+            .filter(Patient.phone.isnot(None), Patient.phone.like(f"%{sig}%"))
+            .all()
+        )
+        if not candidates:
+            all_with_phone = db.query(Patient).filter(Patient.phone.isnot(None)).all()
+            candidates = [
+                p for p in all_with_phone
+                if sig in re.sub(r'\D', '', p.phone or '')
+            ]
+        return candidates
+
+    @staticmethod
     def get_multi(
         db: Session, skip: int = 0, limit: int = 100, search: Optional[str] = None
     ) -> List[Patient]:

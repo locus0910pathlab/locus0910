@@ -80,6 +80,17 @@ def test_patient_crud():
     assert response.status_code == 200
     assert len(response.json()) == 1
 
+    # 5. Check duplicate phone
+    phone_resp = client.get("/api/v1/patients/check-phone?phone=1234567890")
+    assert phone_resp.status_code == 200
+    assert len(phone_resp.json()) == 1
+    assert phone_resp.json()[0]["id"] == patient_id
+
+    # 6. Check non-existent phone
+    phone_resp_none = client.get("/api/v1/patients/check-phone?phone=9999900000")
+    assert phone_resp_none.status_code == 200
+    assert len(phone_resp_none.json()) == 0
+
 
 def test_test_crud():
     # 1. Create Test

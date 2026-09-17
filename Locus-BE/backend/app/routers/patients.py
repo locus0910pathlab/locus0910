@@ -37,6 +37,15 @@ def get_patients(
     return PatientService.get_multi(db, skip=skip, limit=limit, search=search)
 
 
+@router.get("/check-phone", response_model=List[PatientResponse])
+def check_phone_duplicates(
+    phone: str = Query(..., description="Phone number to check for existing patients"),
+    db: Session = Depends(get_db),
+):
+    """Check if any existing patients share this phone number."""
+    return PatientService.get_by_phone(db, phone=phone)
+
+
 @router.get("/{patient_id}", response_model=PatientResponse)
 def get_patient(patient_id: int, db: Session = Depends(get_db)):
     """Retrieve a single patient by ID."""

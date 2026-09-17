@@ -3,6 +3,7 @@ export interface PatientFormData {
   last_name: string;
   email: string;
   phone: string;
+  age?: string;
   date_of_birth: string;
   gender: string;
   residential_address: string;
@@ -18,4 +19,6 @@ export interface PatientFormErrors {
   last_name?: string;
   email?: string;
   phone?: string;
+  gender?: string;
+  residential_address?: string;
 }

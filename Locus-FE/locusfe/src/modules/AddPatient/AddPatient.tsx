@@ -3,9 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { PatientForm } from './components/PatientForm/PatientForm';
 import { TestSelector } from './components/TestSelector/TestSelector';
 import { PatientFormActions } from './components/PatientFormActions/PatientFormActions';
+import { DuplicatePhoneModal } from './components/DuplicatePhoneModal/DuplicatePhoneModal';
 import addPatientService from './services/addPatient.service';
 import { PatientFormData, PatientFormErrors } from './types/addPatient.types';
-import { LabTest } from '../../types/common.types';
+import { LabTest, Patient } from '../../types/common.types';
 import styles from './AddPatient.module.css';
 
 const initialFormData: PatientFormData = {
@@ -13,6 +14,7 @@ const initialFormData: PatientFormData = {
   last_name: '',
   email: '',
   phone: '',
+  age: '',
   date_of_birth: '',
   gender: '',
   residential_address: '',
@@ -29,6 +31,9 @@ export const AddPatient: React.FC = () => {
   const [errors, setErrors] = useState<PatientFormErrors>({});
   const [availableTests, setAvailableTests] = useState<LabTest[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [duplicatePatients, setDuplicatePatients] = useState<Patient[]>([]);
+  const [showDuplicateModal, setShowDuplicateModal] = useState<boolean>(false);
+  const [confirmedDuplicatePhone, setConfirmedDuplicatePhone] = useState<string | null>(null);
 
   useEffect(() => {
     addPatientService.getAvailableTests().then((tests) => {
@@ -40,6 +45,9 @@ export const AddPatient: React.FC = () => {
 
   const handleChange = (field: keyof PatientFormData, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+    if (field === 'phone') {
+      setConfirmedDuplicatePhone(null);
+    }
     if (errors[field as keyof PatientFormErrors]) {
       setErrors((prev) => ({ ...prev, [field]: undefined }));
     }
@@ -68,14 +76,54 @@ export const AddPatient: React.FC = () => {
     if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email address';
     }
+    if (!formData.phone || !formData.phone.trim()) {
+      newErrors.phone = 'Phone number is required';
+    } else if (formData.phone.replace(/\D/g, '').length < 10) {
+      newErrors.phone = 'Please enter a valid 10-digit phone number';
+    }
+    if (!formData.gender) {
+      newErrors.gender = 'Gender is required';
+    }
+    if (!formData.residential_address || !formData.residential_address.trim()) {
+      newErrors.residential_address = 'Residential address is required';
+    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async () => {
     if (!validate()) return;
-    setIsLoading(true);
 
+    // Check for phone duplicate if phone is entered and not yet confirmed
+    const phoneInput = formData.phone ? formData.phone.trim() : '';
+    if (phoneInput && phoneInput.length >= 5 && confirmedDuplicatePhone !== phoneInput) {
+      setIsLoading(true);
+      try {
+        const duplicates = await addPatientService.checkPhoneDuplicates(phoneInput);
+        if (duplicates && duplicates.length > 0) {
+          setDuplicatePatients(duplicates);
+          setShowDuplicateModal(true);
+          setIsLoading(false);
+          return;
+        }
+      } catch (err) {
+        console.warn('Error checking duplicate phone, proceeding:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    await executeRegistration();
+  };
+
+  const handleConfirmDuplicateAdd = async () => {
+    setShowDuplicateModal(false);
+    setConfirmedDuplicatePhone(formData.phone?.trim() || null);
+    await executeRegistration();
+  };
+
+  const executeRegistration = async () => {
+    setIsLoading(true);
     try {
       const result = await addPatientService.registerPatientWithVisit(formData);
       navigate(`/patients/${result.patient.id}`);
@@ -117,6 +165,14 @@ export const AddPatient: React.FC = () => {
           onSubmit={handleSubmit}
         />
       </div>
+
+      <DuplicatePhoneModal
+        isOpen={showDuplicateModal}
+        phone={formData.phone || ''}
+        existingPatients={duplicatePatients}
+        onClose={() => setShowDuplicateModal(false)}
+        onConfirmAdd={handleConfirmDuplicateAdd}
+      />
     </div>
   );
 };

@@ -7,13 +7,33 @@ export const addPatientService = {
     return api.get<LabTest[]>('/tests/', { active_only: true });
   },
 
+  async checkPhoneDuplicates(phone: string): Promise<Patient[]> {
+    if (!phone || phone.trim().length < 5) return [];
+    try {
+      const response = await api.get<Patient[]>('/patients/check-phone', { phone: phone.trim() });
+      return response || [];
+    } catch (err) {
+      console.warn('Error checking phone duplicates:', err);
+      return [];
+    }
+  },
+
   async registerPatientWithVisit(formData: PatientFormData): Promise<{ patient: Patient; visit?: Visit }> {
+    let dob = formData.date_of_birth || null;
+    if (!dob && formData.age !== undefined && formData.age !== '') {
+      const ageNum = Number(formData.age);
+      if (!isNaN(ageNum) && ageNum >= 0) {
+        const year = new Date().getFullYear() - ageNum;
+        dob = `${year}-01-01`;
+      }
+    }
+
     const patientPayload = {
       first_name: formData.first_name,
       last_name: formData.last_name,
       email: formData.email || null,
       phone: formData.phone || null,
-      date_of_birth: formData.date_of_birth || null,
+      date_of_birth: dob,
       gender: formData.gender || null,
       residential_address: formData.residential_address || null,
       emergency_contact_name: formData.emergency_contact_name || null,

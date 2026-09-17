@@ -38,8 +38,18 @@ export const PatientInfo: React.FC<PatientInfoProps> = ({ patient }) => {
         </div>
 
         <div className={styles.field}>
-          <span className={styles.label}>Date of Birth</span>
-          <span className={styles.value}>{patient.date_of_birth || '—'}</span>
+          <span className={styles.label}>Age</span>
+          <span className={styles.value}>
+            {patient.date_of_birth ? (() => {
+              const birthDate = new Date(patient.date_of_birth);
+              if (isNaN(birthDate.getTime())) return '—';
+              const today = new Date();
+              let age = today.getFullYear() - birthDate.getFullYear();
+              const m = today.getMonth() - birthDate.getMonth();
+              if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
+              return `${age} years`;
+            })() : '—'}
+          </span>
         </div>
 
         <div className={styles.field}>
