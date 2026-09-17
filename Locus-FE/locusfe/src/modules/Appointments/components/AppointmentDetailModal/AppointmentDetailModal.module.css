@@ -334,10 +334,10 @@
   flex: 1;
   height: 40px;
   padding: 0 16px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-strong);
-  background-color: var(--bg-surface);
-  color: var(--text-secondary);
+  border-radius: 8px;
+  border: 1.5px solid #111827;
+  background-color: #ffffff;
+  color: #111827;
   font-size: 13.5px;
   font-weight: 600;
   display: inline-flex;
@@ -347,11 +347,14 @@
   cursor: pointer;
   transition: all var(--transition-fast);
   box-sizing: border-box;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 .completingBackBtn:hover {
-  background-color: var(--bg-hover);
-  color: var(--text-primary);
+  background-color: #f3f4f6;
+  border-color: #000000;
+  color: #000000;
+  transform: translateY(-1px);
 }
 
 .completingConfirmBtn {

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, PlusCircle } from 'lucide-react';
 import { PatientInfo } from './components/PatientInfo/PatientInfo';
 import { VisitHistory } from './components/VisitHistory/VisitHistory';
+import { EditPatientModal } from './components/EditPatientModal/EditPatientModal';
 import { Modal } from '../../components/Modal/Modal';
 import { Input } from '../../components/Input/Input';
 import { Button } from '../../components/Button/Button';
@@ -18,6 +19,9 @@ export const PatientDetails: React.FC = () => {
   const [patient, setPatient] = useState<Patient | null>(null);
   const [visits, setVisits] = useState<Visit[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Modal for editing patient
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   // Modal for ordering new test
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
@@ -70,6 +74,12 @@ export const PatientDetails: React.FC = () => {
     }
   };
 
+  const handleUpdatePatient = async (updatedData: Partial<Patient>) => {
+    if (!patient) return;
+    const updated = await patientDetailsService.updatePatient(patient.id, updatedData);
+    setPatient(updated);
+  };
+
   if (isLoading) {
     return <div className={styles.loading}>Loading medical record...</div>;
   }
@@ -102,9 +112,19 @@ export const PatientDetails: React.FC = () => {
       </div>
 
       <div className={styles.grid}>
-        <PatientInfo patient={patient} />
+        <PatientInfo patient={patient} onEdit={() => setIsEditModalOpen(true)} />
         <VisitHistory visits={visits} />
       </div>
+
+      {/* Edit Patient Modal */}
+      {patient && (
+        <EditPatientModal
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          patient={patient}
+          onSave={handleUpdatePatient}
+        />
+      )}
 
       {/* New Lab Order Modal */}
       <Modal

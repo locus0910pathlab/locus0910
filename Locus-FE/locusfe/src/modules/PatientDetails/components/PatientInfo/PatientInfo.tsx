@@ -1,24 +1,35 @@
 import React from 'react';
+import { Pencil } from 'lucide-react';
 import { Patient } from '../../../../types/common.types';
 import styles from './PatientInfo.module.css';
 
 export interface PatientInfoProps {
   patient: Patient;
+  onEdit?: () => void;
 }
 
-export const PatientInfo: React.FC<PatientInfoProps> = ({ patient }) => {
+export const PatientInfo: React.FC<PatientInfoProps> = ({ patient, onEdit }) => {
   const initials = `${patient.first_name[0] || ''}${patient.last_name[0] || ''}`.toUpperCase();
 
   return (
     <div className={styles.card}>
       <div className={styles.header}>
-        <div className={styles.avatar}>{initials}</div>
-        <div>
-          <h2 className={styles.name}>
-            {patient.first_name} {patient.last_name}
-          </h2>
-          <span className={styles.idBadge}>Patient ID: #{patient.id}</span>
+        <div className={styles.patientMeta}>
+          <div className={styles.avatar}>{initials}</div>
+          <div>
+            <h2 className={styles.name}>
+              {patient.first_name} {patient.last_name}
+            </h2>
+            <span className={styles.idBadge}>Patient ID: #{patient.id}</span>
+          </div>
         </div>
+
+        {onEdit && (
+          <button className={styles.editBtn} onClick={onEdit} type="button">
+            <Pencil size={15} />
+            <span>Edit Patient</span>
+          </button>
+        )}
       </div>
 
       <div className={styles.detailsGrid}>
@@ -55,23 +66,6 @@ export const PatientInfo: React.FC<PatientInfoProps> = ({ patient }) => {
         <div className={styles.field}>
           <span className={styles.label}>Residential Address</span>
           <span className={styles.value}>{patient.residential_address || '—'}</span>
-        </div>
-
-        <div className={styles.field}>
-          <span className={styles.label}>Emergency Contact Person</span>
-          <span className={styles.value}>{patient.emergency_contact_name || '—'}</span>
-        </div>
-
-        <div className={styles.field}>
-          <span className={styles.label}>Emergency Contact Phone</span>
-          <span className={styles.value}>{patient.emergency_contact_phone || '—'}</span>
-        </div>
-
-        <div className={styles.field} style={{ gridColumn: '1 / -1' }}>
-          <span className={styles.label}>Clinical Notes / Observations</span>
-          <span className={styles.value} style={{ whiteSpace: 'pre-wrap' }}>
-            {patient.clinical_notes || 'No notes on record.'}
-          </span>
         </div>
       </div>
     </div>

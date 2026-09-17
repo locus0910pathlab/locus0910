@@ -177,18 +177,21 @@
 }
 
 .cancelBtn {
-  background-color: transparent;
-  color: var(--text-secondary);
-  border: 1px solid var(--border-subtle);
+  background-color: var(--accent-rose-light);
+  border: 1px solid rgba(225, 29, 72, 0.35);
+  color: var(--accent-rose);
   font-size: 13.5px;
-  font-weight: 500;
-  padding: 9px 15px;
-  border-radius: var(--radius-md);
+  font-weight: 600;
+  padding: 9px 18px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all var(--transition-fast);
 }
 
 .cancelBtn:hover {
-  background-color: var(--bg-hover);
-  color: var(--text-primary);
+  background-color: var(--accent-rose);
+  border-color: var(--accent-rose);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(225, 29, 72, 0.25);
 }

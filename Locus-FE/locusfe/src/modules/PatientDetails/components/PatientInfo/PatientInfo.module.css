@@ -9,10 +9,47 @@
 .header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 16px;
   margin-bottom: 24px;
   padding-bottom: 20px;
   border-bottom: 1px solid var(--border-subtle);
+}
+
+.patientMeta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.editBtn {
+  height: 38px;
+  padding: 0 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid #f59e0b;
+  background-color: #fffbeb;
+  color: #b45309;
+  font-size: 13.5px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-sizing: border-box;
+}
+
+.editBtn:hover {
+  background-color: #f59e0b;
+  border-color: #f59e0b;
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+}
+
+.editBtn:active {
+  transform: translateY(0);
 }
 
 .avatar {

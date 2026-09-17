@@ -14,6 +14,10 @@ export const patientDetailsService = {
     return { patient, visits };
   },
 
+  async updatePatient(patientId: number | string, payload: Partial<Patient>): Promise<Patient> {
+    return api.put<Patient>(`/patients/${patientId}`, payload);
+  },
+
   async updateTestResult(
     visitId: number,
     visitTestId: number,

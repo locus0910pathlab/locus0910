@@ -31,14 +31,19 @@
 }
 
 .secondary {
-  background-color: var(--bg-surface);
-  color: var(--text-primary);
-  border-color: var(--border-strong);
+  background-color: #ffffff;
+  color: #111827;
+  border: 1.5px solid #111827;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 .secondary:hover:not(:disabled) {
-  background-color: var(--bg-subtle);
-  border-color: var(--text-muted);
+  background-color: #f3f4f6;
+  border-color: #000000;
+  color: #000000;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 }
 
 .danger {
@@ -76,13 +81,18 @@
 }
 
 .outline {
-  background-color: transparent;
-  border-color: var(--primary-500);
-  color: var(--primary-600);
+  background-color: #ffffff;
+  border: 1.5px solid #111827;
+  color: #111827;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 .outline:hover:not(:disabled) {
-  background-color: var(--primary-50);
+  background-color: #f3f4f6;
+  border-color: #000000;
+  color: #000000;
+  transform: translateY(-1px);
 }
 
 /* Sizes */
